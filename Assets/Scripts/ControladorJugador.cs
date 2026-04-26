@@ -1,5 +1,7 @@
 using UnityEngine;
 using System.Collections;
+using UnityEngine.SceneManagement;
+using TMPro; // Necesario para controlar el texto de la UI
 
 public class ControladorJugador : MonoBehaviour
 {
@@ -7,40 +9,75 @@ public class ControladorJugador : MonoBehaviour
     public float velocidad = 5f;
     public float distanciaPaso = 1f;
     public float alturaSalto = 0.5f;
+    public LayerMask capaSuelo;
+
+    [Header("Economía del Juego")]
+    public int numMonedas = 0;
+    public TextMeshProUGUI marcadorTexto; // Arrastra aquí el objeto TextoMonedas
 
     private bool estaMoviendose = false;
 
+    void Start()
+    {
+        ActualizarMarcador();
+    }
+
     void Update()
     {
-        // Solo permitimos un nuevo movimiento si el personaje ha terminado el anterior
+        ManejarCambioEscenas();
+
         if (!estaMoviendose)
         {
-            if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W))
-                StartCoroutine(MoverJugador(Vector3.forward));
+            Vector3 direccion = Vector3.zero;
 
-            else if (Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.S))
-                StartCoroutine(MoverJugador(Vector3.back));
+            if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W)) direccion = Vector3.forward;
+            else if (Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.S)) direccion = Vector3.back;
+            else if (Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.A)) direccion = Vector3.left;
+            else if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D)) direccion = Vector3.right;
 
-            else if (Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.A))
-                StartCoroutine(MoverJugador(Vector3.left));
-
-            else if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D))
-                StartCoroutine(MoverJugador(Vector3.right));
+            if (direccion != Vector3.zero)
+            {
+                Vector3 destino = transform.position + (direccion * distanciaPaso);
+                
+                if (HaySueloEn(destino))
+                {
+                    StartCoroutine(MoverJugador(direccion));
+                }
+            }
         }
+    }
+
+    // Detector de colisión con la moneda
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Moneda"))
+        {
+            numMonedas++;
+            ActualizarMarcador();
+            Destroy(other.gameObject); // La moneda desaparece
+        }
+    }
+
+    void ActualizarMarcador()
+    {
+        if (marcadorTexto != null)
+        {
+            marcadorTexto.text = "Monedas: " + numMonedas;
+        }
+    }
+
+    bool HaySueloEn(Vector3 posicionDestino)
+    {
+        return Physics.Raycast(posicionDestino + Vector3.up, Vector3.down, 2f, capaSuelo);
     }
 
     IEnumerator MoverJugador(Vector3 direccion)
     {
         estaMoviendose = true;
-
         Vector3 posicionInicial = transform.position;
         Vector3 posicionDestino = posicionInicial + (direccion * distanciaPaso);
 
-        // Rotar el personaje hacia la dirección del movimiento
-        if (direccion != Vector3.zero)
-        {
-            transform.forward = direccion;
-        }
+        transform.forward = direccion;
 
         float tiempoTranscurrido = 0;
         float duracion = 1f / velocidad;
@@ -49,19 +86,27 @@ public class ControladorJugador : MonoBehaviour
         {
             tiempoTranscurrido += Time.deltaTime;
             float porcentaje = tiempoTranscurrido / duracion;
-
-            // Movimiento horizontal suave
             Vector3 posicionActual = Vector3.Lerp(posicionInicial, posicionDestino, porcentaje);
-
-            // Efecto de salto (Arco en el eje Y)
             posicionActual.y += Mathf.Sin(porcentaje * Mathf.PI) * alturaSalto;
-
             transform.position = posicionActual;
             yield return null;
         }
 
-        // Aseguramos que termine en la posición exacta
         transform.position = posicionDestino;
         estaMoviendose = false;
+    }
+
+    void ManejarCambioEscenas()
+    {
+        for (int i = 0; i <= 9; i++)
+        {
+            if (Input.GetKeyDown(i.ToString()))
+            {
+                if (i < SceneManager.sceneCountInBuildSettings)
+                {
+                    SceneManager.LoadScene(i);
+                }
+            }
+        }
     }
 }

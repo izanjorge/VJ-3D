@@ -1,34 +1,54 @@
 using UnityEngine;
-using System.Collections.Generic;
 
 public class LevelGenerator : MonoBehaviour
 {
-    public GameObject tilePrefab; // Aquí arrastraremos tu FloorTile de Blockbench
-    public int width = 7;         // Ancho de la sala (columnas)
-    public int height = 10;        // Largo de la sala (filas)
+    [Header("Ajustes de Suelo")]
+    public GameObject floorTilePrefab;
+    public int width = 7;
+    public int length = 11;
 
-    // Lista para guardar los bloques y poder hacer que caigan después
-    private List<GameObject> allTiles = new List<GameObject>();
+    [Header("Materiales por Dificultad")]
+    public Material matVerde;    // Para niveles 0, 1, 2
+    public Material matAmarillo; // Para niveles 3, 4, 5
+    public Material matRojo;     // Para niveles 6, 7, 8
+    public Material matMorado;   // Para nivel 9 (Jefe)
+
+    [Header("Configuración del Nivel")]
+    [Range(0, 9)] public int nivelActual = 0; 
 
     void Start()
     {
-        GenerateGrid();
+        GenerarSuelo();
     }
 
-    void GenerateGrid()
+    void GenerarSuelo()
     {
-        for (int z = 0; z < height; z++)
+        // 1. Decidir qué color toca
+        Material materialAEmitir = SeleccionarMaterial();
+        
+        int offsetCentrado = width / 2;
+
+        for (int x = 0; x < width; x++)
         {
-            for (int x = 0; x < width; x++)
+            for (int z = 0; z < length; z++)
             {
-                // Instanciamos el cubo en posiciones enteras (0, 1, 2...)
-                Vector3 spawnPos = new Vector3(x, 0, z);
-                GameObject newTile = Instantiate(tilePrefab, spawnPos, Quaternion.identity);
+                Vector3 pos = new Vector3(x - offsetCentrado, 0, z);
+                GameObject tile = Instantiate(floorTilePrefab, pos, Quaternion.identity, transform);
                 
-                // Los hacemos hijos de este objeto para no llenar la jerarquía
-                newTile.transform.parent = this.transform;
-                allTiles.Add(newTile);
+                // 2. Pintar la casilla
+                if (materialAEmitir != null)
+                {
+                    tile.GetComponent<Renderer>().material = materialAEmitir;
+                }
             }
         }
+    }
+
+    Material SeleccionarMaterial()
+    {
+        if (nivelActual <= 2) return matVerde;
+        if (nivelActual <= 5) return matAmarillo;
+        if (nivelActual <= 8) return matRojo;
+        return matMorado;
     }
 }
