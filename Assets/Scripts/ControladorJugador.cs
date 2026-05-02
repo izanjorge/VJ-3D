@@ -36,6 +36,8 @@ public class ControladorJugador : MonoBehaviour
         Vector3 posicionInicial = transform.position;
         Vector3 posicionDestino = posicionInicial + (direccion * distanciaPaso);
 
+        LimpiarCasilla(posicionInicial);
+
         // Rotar el personaje hacia la dirección del movimiento
         if (direccion != Vector3.zero)
         {
@@ -57,11 +59,33 @@ public class ControladorJugador : MonoBehaviour
             posicionActual.y += Mathf.Sin(porcentaje * Mathf.PI) * alturaSalto;
 
             transform.position = posicionActual;
+
             yield return null;
         }
 
         // Aseguramos que termine en la posición exacta
         transform.position = posicionDestino;
+        LimpiarCasilla(posicionDestino);
         estaMoviendose = false;
+    }
+
+    private void LimpiarCasilla(Vector3 posicion)
+    {
+        // Creamos una "burbuja" de detección de 0.5 metros alrededor de los pies del jugador.
+        // Esto es mucho más robusto que un rayo porque abarca toda la casilla.
+        Collider[] objetosPisados = Physics.OverlapSphere(posicion, 0.1f);
+
+        foreach (Collider obj in objetosPisados)
+        {
+            // Buscamos si alguno de los objetos que hemos pisado es una Casilla
+            Casilla casilla = obj.GetComponentInParent<Casilla>();
+
+            if (casilla != null)
+            {
+                casilla.LimpiarSlime();
+                // No ponemos "break;" aquí por si el jugador pisa entre dos casillas, 
+                // así limpiará ambas por seguridad.
+            }
+        }
     }
 }
