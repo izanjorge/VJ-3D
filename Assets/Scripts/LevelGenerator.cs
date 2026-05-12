@@ -5,8 +5,9 @@ public class LevelGenerator : MonoBehaviour
     [Header("Referencias de Prefabs")]
     public GameObject floorTilePrefab;
     public GameObject barrilPrefab;
-    public GameObject jarronPrefab; // NUEVO HUECO PARA EL JARRÓN
+    public GameObject jarronPrefab; 
     public GameObject monedaPrefab;
+    public GameObject trampaPinchosPrefab;
     public GameObject player;
 
     [Header("Materiales por Dificultad")]
@@ -16,7 +17,7 @@ public class LevelGenerator : MonoBehaviour
     public Material matMorado;   
 
     [Header("Configuración del Nivel")]
-    [Range(0, 9)] public int nivelActual = 0; // Cambiará en cada escena
+    [Range(0, 9)] public int nivelActual = 0; 
     public int filas = 10;
     public int columnas = 7;
 
@@ -34,10 +35,10 @@ public class LevelGenerator : MonoBehaviour
         {
             for (int c = 0; c < columnas; c++)
             {
-                // Calculamos la posición física
+                // Calculamos la posición física de la celda
                 Vector3 posicionCelda = new Vector3(c - offsetColumnas, 0, f);
                 
-                // 1. Instanciamos el suelo y lo pintamos
+                // 1. SIEMPRE GENERAMOS EL SUELO BASE
                 GameObject suelo = Instantiate(floorTilePrefab, posicionCelda, Quaternion.identity, transform);
                 if (materialSeleccionado != null)
                 {
@@ -50,7 +51,7 @@ public class LevelGenerator : MonoBehaviour
                     player.transform.position = posicionCelda + Vector3.up * 0.5f;
                 }
 
-                // 3. Colocamos objetos según el nivel actual
+                // 3. Colocamos todos los objetos y trampas ENCIMA del suelo
                 DecidirObjeto(f, c, posicionCelda);
             }
         }
@@ -90,6 +91,13 @@ public class LevelGenerator : MonoBehaviour
         // ==========================================
         else if (nivelActual == 1)
         {
+            // Lógica de la Trampa de Pinchos: [6][2], [6][3], [6][4]
+            if (f == 6 && (c == 2 || c == 3 || c == 4))
+            {
+                // SOLUCIÓN Z-FIGHTING: Elevamos la trampa a 0.51f para que quede ligeramente separada de la textura del suelo
+                Instantiate(trampaPinchosPrefab, pos + Vector3.up * 0.51f, Quaternion.identity, transform);
+            }
+
             // Lógica del Jarrón: [0][0]
             if (f == 0 && c == 0)
             {

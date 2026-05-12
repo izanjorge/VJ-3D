@@ -14,7 +14,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 2bc971589c82cd64a98089b70f463176, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 2bc971589c82cd64a98089b70f463176, type: 3}
       propertyPath: m_LocalPosition.z
@@ -53,7 +53,16 @@ PrefabInstance:
       value: TrampaPinchos
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: -7598985891303206055, guid: 2bc971589c82cd64a98089b70f463176, type: 3}
+    - {fileID: 3505421766025473038, guid: 2bc971589c82cd64a98089b70f463176, type: 3}
+    - {fileID: 323157160697887509, guid: 2bc971589c82cd64a98089b70f463176, type: 3}
+    - {fileID: 8009510119330135920, guid: 2bc971589c82cd64a98089b70f463176, type: 3}
+    - {fileID: 7756696347236018246, guid: 2bc971589c82cd64a98089b70f463176, type: 3}
+    - {fileID: -1723477948205424843, guid: 2bc971589c82cd64a98089b70f463176, type: 3}
+    - {fileID: 8324925623110314709, guid: 2bc971589c82cd64a98089b70f463176, type: 3}
+    - {fileID: -525405391905169235, guid: 2bc971589c82cd64a98089b70f463176, type: 3}
+    - {fileID: -1745020723122551851, guid: 2bc971589c82cd64a98089b70f463176, type: 3}
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: 2bc971589c82cd64a98089b70f463176, type: 3}
       insertIndex: -1
@@ -62,6 +71,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 2bc971589c82cd64a98089b70f463176, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2345101135064218797}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 2bc971589c82cd64a98089b70f463176, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2739801019537818817}
   m_SourcePrefab: {fileID: 100100000, guid: 2bc971589c82cd64a98089b70f463176, type: 3}
 --- !u!1 &2577935336165876141 stripped
 GameObject:
@@ -89,6 +101,24 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &2739801019537818817
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2577935336165876141}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 639b958a939312a4084d8fb9a07c7038, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TrampaPinchos
+  objetoPinchos: {fileID: 4844785740523993472}
+  tiempoEsperaBajado: 2
+  tiempoEsperaSubido: 1
+  velocidadMovimiento: 10
+  alturaEscondido: -0.5
+  alturaFuera: 0.5
 --- !u!4 &2922126058413652759 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 2bc971589c82cd64a98089b70f463176, type: 3}
