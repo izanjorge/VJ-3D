@@ -1,0 +1,59 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &7054897929111532772
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5234599993242352755}
+  - component: {fileID: 1437492936028206459}
+  m_Layer: 0
+  m_Name: LevelManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5234599993242352755
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7054897929111532772}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0, y: -0, z: -0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1437492936028206459
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7054897929111532772}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a2fc36993bf0c86429607e6dd33ae3e1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LevelGenerator
+  floorTilePrefab: {fileID: 8005364936035428392, guid: 5fd307fd3f097ba4c896808af926ec61, type: 3}
+  barrilPrefab: {fileID: 7978451050072388067, guid: c96f7c98df8a19a4f9426af849b28d31, type: 3}
+  jarronPrefab: {fileID: 5603896044248792450, guid: debbeac27949deb43b6247e31a473d82, type: 3}
+  monedaPrefab: {fileID: 1981859570387936174, guid: 024da77071eb1b84a80e02f1cd77be7a, type: 3}
+  trampaPinchosPrefab: {fileID: 2577935336165876141, guid: 9cceb126b3b2889459257d12ff2b86da, type: 3}
+  player: {fileID: 3121361568472952716, guid: 31d5f12d48d443a4dba0720415b12f92, type: 3}
+  matVerde: {fileID: 2100000, guid: 29d1eef3ba4482a488168b3c1bb852b0, type: 2}
+  matAmarillo: {fileID: 0}
+  matRojo: {fileID: 0}
+  matMorado: {fileID: 0}
+  nivelActual: 0
+  filas: 10
+  columnas: 7

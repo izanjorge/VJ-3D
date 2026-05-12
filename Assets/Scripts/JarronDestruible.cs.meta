@@ -1,0 +1,13 @@
+fileFormatVersion: 2
+guid: 64b3596df57657c44a431c0247f78b6f
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - monedaPrefab: {fileID: 1981859570387936174, guid: 024da77071eb1b84a80e02f1cd77be7a, type: 3}
+  - particulasExplosion: {fileID: 4036700477496429686, guid: 2917c843c71ed2e4b96ae51cf0629e9b, type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
