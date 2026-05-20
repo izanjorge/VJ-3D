@@ -10,6 +10,11 @@ public class LevelGenerator : MonoBehaviour
     public GameObject trampaPinchosPrefab;
     public GameObject player;
 
+    [Header("Referencias de Paredes")]
+    public GameObject pared1Prefab; 
+    public GameObject pared2Prefab; 
+    public GameObject pared3Prefab; 
+
     [Header("Materiales por Dificultad")]
     public Material matVerde;    
     public Material matAmarillo; 
@@ -24,6 +29,7 @@ public class LevelGenerator : MonoBehaviour
     void Start()
     {
         GenerarMapa();
+        GenerarParedesL(); 
     }
 
     void GenerarMapa()
@@ -35,24 +41,87 @@ public class LevelGenerator : MonoBehaviour
         {
             for (int c = 0; c < columnas; c++)
             {
-                // Calculamos la posición física de la celda
                 Vector3 posicionCelda = new Vector3(c - offsetColumnas, 0, f);
                 
-                // 1. SIEMPRE GENERAMOS EL SUELO BASE
-                GameObject suelo = Instantiate(floorTilePrefab, posicionCelda, Quaternion.identity, transform);
-                if (materialSeleccionado != null)
+                bool esTrampa = (nivelActual == 1 && f == 5 && (c == 2 || c == 3 || c == 4));
+
+                if (esTrampa)
                 {
-                    suelo.GetComponent<Renderer>().material = materialSeleccionado;
+                    Instantiate(trampaPinchosPrefab, posicionCelda, Quaternion.identity, transform);
+                }
+                else
+                {
+                    GameObject suelo = Instantiate(floorTilePrefab, posicionCelda, Quaternion.identity, transform);
+                    if (materialSeleccionado != null)
+                    {
+                        suelo.GetComponent<Renderer>().material = materialSeleccionado;
+                    }
                 }
 
-                // 2. Colocamos al Player (Siempre empieza en f=0, c=3)
                 if (f == 0 && c == 3 && player != null)
                 {
                     player.transform.position = posicionCelda + Vector3.up * 0.5f;
                 }
 
-                // 3. Colocamos todos los objetos y trampas ENCIMA del suelo
-                DecidirObjeto(f, c, posicionCelda);
+                if (!esTrampa)
+                {
+                    DecidirObjeto(f, c, posicionCelda);
+                }
+            }
+        }
+    }
+
+    void GenerarParedesL()
+    {
+        int offsetColumnas = columnas / 2; 
+        
+        float xIzquierda = -offsetColumnas - 0.5f; 
+        float zFondo = filas - 0.5f; 
+
+        // SOLUCIÓN ALTURA: Subimos los muros para que queden a ras de suelo y tapen al jugador
+        float alturaMuros = 1.0f; 
+
+        // 1. PARED DEL FONDO (Cierre exacto sin sobresalir)
+        // Posiciones solapadas inteligentemente para que los extremos queden clavados en los bordes
+        float[] posicionesXFondo = { -2.5f, -1f, 0f, 1f, 2.5f };
+        
+        foreach (float x in posicionesXFondo)
+        {
+            Vector3 posicionCelda = new Vector3(x, alturaMuros, zFondo);
+            GameObject paredAInstanciar = pared1Prefab;
+
+            if (x == 0f) 
+            {
+                paredAInstanciar = pared3Prefab; // Puerta central
+            }
+            else if (x == -1f || x == 1f)
+            {
+                paredAInstanciar = pared2Prefab; // Antorchas
+            }
+
+            if (paredAInstanciar != null)
+            {
+                Instantiate(paredAInstanciar, posicionCelda, Quaternion.Euler(0, 90, 0), transform);
+            }
+        }
+
+        // 2. PARED LATERAL IZQUIERDA (Cierre Hermético exacto)
+        // 5 Muros que cubren exactamente todo el lateral sin pasarse
+        for (int i = 0; i < 5; i++)
+        {
+            float zPos = (i * 2) + 0.5f; 
+            Vector3 posicionCelda = new Vector3(xIzquierda, alturaMuros, zPos);
+            GameObject paredAInstanciar = pared1Prefab;
+
+            // Antorchas en posiciones que no estorben
+            if (i == 1 || i == 3)
+            {
+                paredAInstanciar = pared2Prefab;
+            }
+
+            if (paredAInstanciar != null)
+            {
+                Instantiate(paredAInstanciar, posicionCelda, Quaternion.identity, transform);
             }
         }
     }
@@ -67,53 +136,35 @@ public class LevelGenerator : MonoBehaviour
 
     void DecidirObjeto(int f, int c, Vector3 pos)
     {
-        // ==========================================
-        // NIVEL 1 (Índice 0 en Unity)
-        // ==========================================
         if (nivelActual == 0)
         {
-            // Lógica de Barriles
             if ((f == 3 && (c == 4 || c == 5 || c == 6)) || 
                 (f == 5 && (c == 0 || c == 1 || c == 2)))
             {
                 Instantiate(barrilPrefab, pos + Vector3.up * 1f, Quaternion.identity, transform);
             }
 
-            // Lógica de Monedas
             if ((f == 6 && c == 1) || (f == 4 && c == 5))
             {
                 Instantiate(monedaPrefab, pos, monedaPrefab.transform.rotation, transform);
             }
         }
-
-        // ==========================================
-        // NIVEL 2 (Índice 1 en Unity)
-        // ==========================================
-        else if (nivelActual == 1)
+        else if (nivelActual == 1) 
         {
-            // Lógica de la Trampa de Pinchos: [6][2], [6][3], [6][4]
-            if (f == 6 && (c == 2 || c == 3 || c == 4))
-            {
-                // SOLUCIÓN Z-FIGHTING: Elevamos la trampa a 0.51f para que quede ligeramente separada de la textura del suelo
-                Instantiate(trampaPinchosPrefab, pos + Vector3.up * 0.51f, Quaternion.identity, transform);
-            }
-
-            // Lógica del Jarrón: [0][0]
             if (f == 0 && c == 0)
             {
                 Instantiate(jarronPrefab, pos + Vector3.up * 1f, Quaternion.identity, transform);
             }
 
-            // Lógica de Barriles: [3][0],[3][1],[4][1],[5][1],[6][1],[7][1] y [6][5],[7][5],[8][5],[9][5]
-            if ((f == 3 && c == 0) || (f == 3 && c == 1) || (f == 4 && c == 1) || 
-                (f == 5 && c == 1) || (f == 6 && c == 1) || (f == 7 && c == 1) ||
-                (f == 6 && c == 5) || (f == 7 && c == 5) || (f == 8 && c == 5) || (f == 9 && c == 5))
+            if ((f == 2 && (c == 1 || c == 5)) || 
+                (f == 3 && (c == 2 || c == 4)) || 
+                (f == 5 && (c == 0 || c == 6)) || 
+                (f == 7 && (c == 2 || c == 3 || c == 4)))
             {
                 Instantiate(barrilPrefab, pos + Vector3.up * 1f, Quaternion.identity, transform);
             }
 
-            // Lógica de Monedas: [4][0],[8][6]
-            if ((f == 4 && c == 0) || (f == 8 && c == 6))
+            if ((f == 4 && c == 3) || (f == 6 && c == 1) || (f == 6 && c == 5))
             {
                 Instantiate(monedaPrefab, pos, monedaPrefab.transform.rotation, transform);
             }

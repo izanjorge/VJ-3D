@@ -51,9 +51,9 @@ MonoBehaviour:
   trampaPinchosPrefab: {fileID: 2577935336165876141, guid: 9cceb126b3b2889459257d12ff2b86da, type: 3}
   player: {fileID: 3121361568472952716, guid: 31d5f12d48d443a4dba0720415b12f92, type: 3}
   matVerde: {fileID: 2100000, guid: 29d1eef3ba4482a488168b3c1bb852b0, type: 2}
-  matAmarillo: {fileID: 0}
-  matRojo: {fileID: 0}
-  matMorado: {fileID: 0}
+  matAmarillo: {fileID: 2100000, guid: ab7e637da57d623459ad3f56c1df883f, type: 2}
+  matRojo: {fileID: 2100000, guid: 24be9d819d7dd3f48adcb77e41c684be, type: 2}
+  matMorado: {fileID: 2100000, guid: 79bc4b2131737864b9830b5d7777eb9b, type: 2}
   nivelActual: 0
   filas: 10
   columnas: 7
