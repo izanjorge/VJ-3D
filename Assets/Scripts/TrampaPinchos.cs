@@ -4,20 +4,32 @@ using System.Collections;
 public class TrampaPinchos : MonoBehaviour
 {
     [Header("Referencias")]
-    public Transform objetoPinchos; // Arrastraremos aquí el hijo "Pinchos"
+    public Transform objetoPinchos;
 
-    [Header("Configuración de Tiempos")]
+    [Header("Tiempos del Ciclo")]
     public float tiempoEsperaBajado = 2f;
     public float tiempoEsperaSubido = 1f;
-    public float velocidadMovimiento = 10f;
+
+    [Header("Animación")]
+    public float duracionSubida = 0.9f;
+    public float duracionBajada = 1.2f;
 
     [Header("Posiciones")]
-    public float alturaEscondido = -0.5f; // Altura cuando no se ven
-    public float alturaFuera = 0.5f;      // Altura cuando atacan
+    public float alturaEscondido = -1f;
+    public float alturaFuera = 1f;
+
+    // El colisionador de daño está en ESTE objeto (junto a DetectorGolpe)
+    private Collider colisionadorDanio;
 
     void Start()
     {
-        // Iniciamos el ciclo infinito de la trampa
+        colisionadorDanio = GetComponent<Collider>();
+
+        // Estado inicial: pinchos escondidos y sin colisión de daño
+        SetY(alturaEscondido);
+        if (colisionadorDanio != null)
+            colisionadorDanio.enabled = false;
+
         StartCoroutine(CicloTrampa());
     }
 
@@ -25,35 +37,52 @@ public class TrampaPinchos : MonoBehaviour
     {
         while (true)
         {
-            // 1. Esperar con los pinchos bajados
             yield return new WaitForSeconds(tiempoEsperaBajado);
-
-            // 2. Subir pinchos rápidamente
-            yield return MoverPinchos(alturaFuera);
-
-            // 3. Esperar con los pinchos fuera (peligro)
+            yield return Subir();
             yield return new WaitForSeconds(tiempoEsperaSubido);
-
-            // 4. Bajar pinchos
-            yield return MoverPinchos(alturaEscondido);
+            yield return Bajar();
         }
     }
 
-    IEnumerator MoverPinchos(float alturaObjetivo)
+    IEnumerator Subir()
     {
-        Vector3 posicionObjetivo = new Vector3(objetoPinchos.localPosition.x, alturaObjetivo, objetoPinchos.localPosition.z);
-        
-        // Mientras no hayamos llegado a la altura deseada...
-        while (Vector3.Distance(objetoPinchos.localPosition, posicionObjetivo) > 0.01f)
+        // Activamos el daño en cuanto empiezan a salir
+        if (colisionadorDanio != null) colisionadorDanio.enabled = true;
+
+        float tiempo = 0f;
+        while (tiempo < duracionSubida)
         {
-            objetoPinchos.localPosition = Vector3.MoveTowards(
-                objetoPinchos.localPosition, 
-                posicionObjetivo, 
-                velocidadMovimiento * Time.deltaTime
-            );
+            tiempo += Time.deltaTime;
+            float t = Mathf.Clamp01(tiempo / duracionSubida);
+            // SmoothStep (S-curve): emerge despacio, acelera en el centro, frena al llegar
+            float tSmooth = t * t * (3f - 2f * t);
+            SetY(Mathf.Lerp(alturaEscondido, alturaFuera, tSmooth));
             yield return null;
         }
-        
-        objetoPinchos.localPosition = posicionObjetivo;
+        SetY(alturaFuera);
+    }
+
+    IEnumerator Bajar()
+    {
+        float tiempo = 0f;
+        while (tiempo < duracionBajada)
+        {
+            tiempo += Time.deltaTime;
+            float t = Mathf.Clamp01(tiempo / duracionBajada);
+            // Ease-out (1-(1-t)²): rápido al principio, frena al llegar abajo
+            SetY(Mathf.Lerp(alturaFuera, alturaEscondido, 1f - (1f - t) * (1f - t)));
+            yield return null;
+        }
+        SetY(alturaEscondido);
+
+        // Solo quitamos el daño cuando están completamente escondidos
+        if (colisionadorDanio != null) colisionadorDanio.enabled = false;
+    }
+
+    void SetY(float y)
+    {
+        Vector3 pos = objetoPinchos.localPosition;
+        pos.y = y;
+        objetoPinchos.localPosition = pos;
     }
 }

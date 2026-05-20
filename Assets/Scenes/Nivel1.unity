@@ -551,9 +551,21 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 1437492936028206459, guid: 409ebd6f2761cec42a82459b08947d6a, type: 3}
+      propertyPath: cajaPrefab
+      value: 
+      objectReference: {fileID: 296296065157652429, guid: 2d5e405f4b76ba24fbf45cdbc4129f8f, type: 3}
+    - target: {fileID: 1437492936028206459, guid: 409ebd6f2761cec42a82459b08947d6a, type: 3}
+      propertyPath: rocaPrefab
+      value: 
+      objectReference: {fileID: 1733672611313434869, guid: b877300632c72234196187e06b7093ab, type: 3}
+    - target: {fileID: 1437492936028206459, guid: 409ebd6f2761cec42a82459b08947d6a, type: 3}
       propertyPath: nivelActual
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 1437492936028206459, guid: 409ebd6f2761cec42a82459b08947d6a, type: 3}
+      propertyPath: vallaPrefab
+      value: 
+      objectReference: {fileID: 2756742589314315444, guid: 3c9fe11c241e1694ea847d2c4e56115f, type: 3}
     - target: {fileID: 1437492936028206459, guid: 409ebd6f2761cec42a82459b08947d6a, type: 3}
       propertyPath: pared1Prefab
       value: 
@@ -562,6 +574,14 @@ PrefabInstance:
       propertyPath: pared2Prefab
       value: 
       objectReference: {fileID: 4566050377835672055, guid: 6ef4feb76e4227648ba7ae359be656fe, type: 3}
+    - target: {fileID: 1437492936028206459, guid: 409ebd6f2761cec42a82459b08947d6a, type: 3}
+      propertyPath: trampaLapidaPrefab
+      value: 
+      objectReference: {fileID: 5707318452249185376, guid: ca87e78684a519f4ab2449c269a423bb, type: 3}
+    - target: {fileID: 1437492936028206459, guid: 409ebd6f2761cec42a82459b08947d6a, type: 3}
+      propertyPath: trampaFlechasPrefab
+      value: 
+      objectReference: {fileID: 3735256001333624474, guid: df44e7eed5870764780eaa85c0aa37d7, type: 3}
     - target: {fileID: 1437492936028206459, guid: 409ebd6f2761cec42a82459b08947d6a, type: 3}
       propertyPath: trampaPinchosPrefab
       value: 
@@ -627,9 +647,10 @@ GameObject:
   - component: {fileID: 1373663793}
   - component: {fileID: 1373663794}
   - component: {fileID: 1373663795}
+  - component: {fileID: 1373663796}
   m_Layer: 0
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Jugador
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -721,6 +742,24 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0.5, z: 0}
+--- !u!114 &1373663796
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1373663791}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6e748109f2ecd6446a8c71ecbbfbd26a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SaludJugador
+  vidasMax: 3
+  duracionInvulnerabilidad: 1.5
+  retardoReinicioEscena: 1.5
+  rendererJugador: {fileID: 1746445556}
+  intervaloParpadeo: 0.1
+  textoVidas: {fileID: 0}
 --- !u!1 &1422497835 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 9155359139166569683, guid: 5fa98f8e43c68964790e7395559ad34e, type: 3}
@@ -840,6 +879,11 @@ Transform:
 --- !u!4 &1746445555 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 9eecf4de6411f9c44a4a970ebd4bcf24, type: 3}
+  m_PrefabInstance: {fileID: 126589170}
+  m_PrefabAsset: {fileID: 0}
+--- !u!23 &1746445556 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: -7511558181221131132, guid: 9eecf4de6411f9c44a4a970ebd4bcf24, type: 3}
   m_PrefabInstance: {fileID: 126589170}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1974779503

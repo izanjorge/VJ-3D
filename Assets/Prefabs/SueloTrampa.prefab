@@ -8,9 +8,25 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 2849809202506203688}
     m_Modifications:
+    - target: {fileID: 2345101135064218797, guid: 9cceb126b3b2889459257d12ff2b86da, type: 3}
+      propertyPath: m_Size.x
+      value: 0.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 2345101135064218797, guid: 9cceb126b3b2889459257d12ff2b86da, type: 3}
+      propertyPath: m_Size.z
+      value: 0.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 2345101135064218797, guid: 9cceb126b3b2889459257d12ff2b86da, type: 3}
+      propertyPath: m_IsTrigger
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2577935336165876141, guid: 9cceb126b3b2889459257d12ff2b86da, type: 3}
       propertyPath: m_Name
       value: TrampaPinchos
+      objectReference: {fileID: 0}
+    - target: {fileID: 2577935336165876141, guid: 9cceb126b3b2889459257d12ff2b86da, type: 3}
+      propertyPath: m_Layer
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2739801019537818817, guid: 9cceb126b3b2889459257d12ff2b86da, type: 3}
       propertyPath: alturaFuera
@@ -18,7 +34,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2739801019537818817, guid: 9cceb126b3b2889459257d12ff2b86da, type: 3}
       propertyPath: alturaEscondido
-      value: 0
+      value: -1
       objectReference: {fileID: 0}
     - target: {fileID: 2922126058413652759, guid: 9cceb126b3b2889459257d12ff2b86da, type: 3}
       propertyPath: m_LocalPosition.x
@@ -63,8 +79,29 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 2577935336165876141, guid: 9cceb126b3b2889459257d12ff2b86da, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8385971154736598289}
   m_SourcePrefab: {fileID: 100100000, guid: 9cceb126b3b2889459257d12ff2b86da, type: 3}
+--- !u!1 &3546717690297673979 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2577935336165876141, guid: 9cceb126b3b2889459257d12ff2b86da, type: 3}
+  m_PrefabInstance: {fileID: 1368762737505683798}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &8385971154736598289
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3546717690297673979}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 56de69e84dab2b1489a3d7f2038399d7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DetectorGolpe
+  danio: 1
 --- !u!4 &4211895198914523713 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2922126058413652759, guid: 9cceb126b3b2889459257d12ff2b86da, type: 3}
@@ -134,6 +171,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SueloTrampa
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 9beb7e2079a863840ae5ff4661ea5817, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 1923033481949362729, guid: 9beb7e2079a863840ae5ff4661ea5817, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -156,10 +197,39 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: 9beb7e2079a863840ae5ff4661ea5817, type: 3}
       insertIndex: -1
       addedObject: {fileID: 4211895198914523713}
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 9beb7e2079a863840ae5ff4661ea5817, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7962814183652354962}
   m_SourcePrefab: {fileID: 100100000, guid: 9beb7e2079a863840ae5ff4661ea5817, type: 3}
 --- !u!4 &2849809202506203688 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 9beb7e2079a863840ae5ff4661ea5817, type: 3}
   m_PrefabInstance: {fileID: 2307592485082817987}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &3226652053450643602 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 9beb7e2079a863840ae5ff4661ea5817, type: 3}
+  m_PrefabInstance: {fileID: 2307592485082817987}
+  m_PrefabAsset: {fileID: 0}
+--- !u!65 &7962814183652354962
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3226652053450643602}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}

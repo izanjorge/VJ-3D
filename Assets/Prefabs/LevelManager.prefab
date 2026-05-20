@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5234599993242352755}
   - component: {fileID: 1437492936028206459}
+  - component: {fileID: 556915001015731872}
   m_Layer: 0
   m_Name: LevelManager
   m_TagString: Untagged
@@ -45,15 +46,38 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LevelGenerator
   floorTilePrefab: {fileID: 8005364936035428392, guid: 5fd307fd3f097ba4c896808af926ec61, type: 3}
+  pared1Prefab: {fileID: 8443399328836561400, guid: de19182b33120ed49aefef692b509df0, type: 3}
+  pared2Prefab: {fileID: 4566050377835672055, guid: 6ef4feb76e4227648ba7ae359be656fe, type: 3}
+  pared3Prefab: {fileID: 0}
+  trampaPinchosPrefab: {fileID: 2577935336165876141, guid: 9cceb126b3b2889459257d12ff2b86da, type: 3}
+  trampaFlechasPrefab: {fileID: 3735256001333624474, guid: df44e7eed5870764780eaa85c0aa37d7, type: 3}
+  trampaLapidaPrefab: {fileID: 5707318452249185376, guid: ca87e78684a519f4ab2449c269a423bb, type: 3}
   barrilPrefab: {fileID: 7978451050072388067, guid: c96f7c98df8a19a4f9426af849b28d31, type: 3}
   jarronPrefab: {fileID: 5603896044248792450, guid: debbeac27949deb43b6247e31a473d82, type: 3}
+  cajaPrefab: {fileID: 296296065157652429, guid: 2d5e405f4b76ba24fbf45cdbc4129f8f, type: 3}
+  rocaPrefab: {fileID: 1733672611313434869, guid: b877300632c72234196187e06b7093ab, type: 3}
+  vallaPrefab: {fileID: 2756742589314315444, guid: 3c9fe11c241e1694ea847d2c4e56115f, type: 3}
   monedaPrefab: {fileID: 1981859570387936174, guid: 024da77071eb1b84a80e02f1cd77be7a, type: 3}
-  trampaPinchosPrefab: {fileID: 2577935336165876141, guid: 9cceb126b3b2889459257d12ff2b86da, type: 3}
   player: {fileID: 3121361568472952716, guid: 31d5f12d48d443a4dba0720415b12f92, type: 3}
   matVerde: {fileID: 2100000, guid: 29d1eef3ba4482a488168b3c1bb852b0, type: 2}
   matAmarillo: {fileID: 2100000, guid: ab7e637da57d623459ad3f56c1df883f, type: 2}
   matRojo: {fileID: 2100000, guid: 24be9d819d7dd3f48adcb77e41c684be, type: 2}
   matMorado: {fileID: 2100000, guid: 79bc4b2131737864b9830b5d7777eb9b, type: 2}
   nivelActual: 0
-  filas: 10
-  columnas: 7
+  gestorCaida: {fileID: 0}
+--- !u!114 &556915001015731872
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7054897929111532772}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 823047f1e0a704940ac2c506fccad150, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GestorCaidaSuelo
+  retardoInicial: 4
+  intervaloEntreFilas: 1
+  duracionAdvertencia: 0.35
+  duracionCaida: 0.55

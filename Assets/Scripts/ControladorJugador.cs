@@ -152,14 +152,15 @@ public class ControladorJugador : MonoBehaviour
 
     bool HaySueloEn(Vector3 posicionDestino)
     {
-        return Physics.Raycast(posicionDestino + Vector3.up, Vector3.down, 2f, capaSuelo);
+        return Physics.Raycast(posicionDestino + Vector3.up, Vector3.down, 2f, capaSuelo, QueryTriggerInteraction.Ignore);
     }
 
     bool HayObstaculoEnDestino(Vector3 posicionDestino)
     {
         Vector3 centroCaja = posicionDestino + (Vector3.up * 1f);
         Vector3 dimensionesMitad = new Vector3(0.4f, 1f, 0.4f);
-        return Physics.CheckBox(centroCaja, dimensionesMitad, Quaternion.identity, capaObstaculos);
+        // Ignoramos Triggers explícitamente: las trampas son Triggers y no deben bloquear el movimiento
+        return Physics.CheckBox(centroCaja, dimensionesMitad, Quaternion.identity, capaObstaculos, QueryTriggerInteraction.Ignore);
     }
 
     IEnumerator MoverJugador(Vector3 direccion)
