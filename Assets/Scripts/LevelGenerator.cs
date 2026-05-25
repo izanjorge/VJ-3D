@@ -272,7 +272,7 @@ public class LevelGenerator : MonoBehaviour
 
                 // Posición inicial del jugador (fila 0, columna central)
                 if (f == 0 && c == 3 && player != null)
-                    player.transform.position = pos + Vector3.up * 0.5f;
+                    player.transform.position = pos + Vector3.up * 0.05f;
 
                 ColocarElemento(tile, pos, c, f);
             }
@@ -289,11 +289,12 @@ public class LevelGenerator : MonoBehaviour
                 break;
 
             case 'F':
-                // Lateral izquierdo (c=0) apunta a la derecha, lateral derecho (c=6) a la izquierda
-                Quaternion rotF = columna == 0 ? Quaternion.Euler(0, -90, 0) :
-                                  columna == 6 ? Quaternion.Euler(0,  90, 0) :
+                // c=0 (izquierda) dispara hacia la derecha (+X)
+                // c=6 (derecha) dispara hacia la izquierda (-X)
+                Quaternion rotF = columna == 0 ? Quaternion.Euler(0,  180, 0) :
+                                  columna == 6 ? Quaternion.Euler(0, 0, 0) :
                                                  Quaternion.identity;
-                SpawnRegistrado(trampaFlechasPrefab, pos, rotF, fila);
+                SpawnRegistrado(trampaFlechasPrefab, pos + Vector3.up * 1.7f, rotF, fila);
                 break;
 
             case 'L':
