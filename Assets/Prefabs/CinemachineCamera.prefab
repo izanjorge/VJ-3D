@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 6111371177989093552}
   - component: {fileID: 4911481723859343543}
   - component: {fileID: 2597619027222722743}
+  - component: {fileID: 9065585894555630327}
   m_Layer: 0
   m_Name: CinemachineCamera
   m_TagString: Untagged
@@ -95,3 +96,15 @@ MonoBehaviour:
     RotationDamping: {x: 1, y: 1, z: 1}
     QuaternionDamping: 1
   FollowOffset: {x: 2, y: 4, z: -2}
+--- !u!114 &9065585894555630327
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2212401318899368360}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bb015f596c370cc4cb11a7250db7250f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CamaraSeguirJugador

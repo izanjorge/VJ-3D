@@ -25,9 +25,55 @@ public class SaludJugador : MonoBehaviour
     public System.Action<int, int> OnVidaCambiada; // (vidasActuales, vidasMax)
     public System.Action OnMuerte;
 
+    // ── Singleton persistente entre escenas ─────────────────────────────────
+    public static SaludJugador Instancia { get; private set; }
+
     void Awake()
     {
+        if (Instancia != null && Instancia != this)
+        {
+            // Ya existe un jugador persistente: actualizar referencia en LevelGenerator
+            // (esto ocurre en Awake, antes de que LevelGenerator.Start() se ejecute).
+            LevelGenerator gen = FindFirstObjectByType<LevelGenerator>();
+            if (gen != null) gen.player = Instancia.gameObject;
+            Destroy(gameObject);
+            return;
+        }
+
+        Instancia = this;
+        DontDestroyOnLoad(gameObject);
         VidasActuales = vidasMax;
+    }
+
+    void OnEnable()
+    {
+        SceneManager.sceneLoaded += OnEscenaCargada;
+    }
+
+    void OnDisable()
+    {
+        SceneManager.sceneLoaded -= OnEscenaCargada;
+    }
+
+    // Se llama automáticamente cada vez que termina de cargar una escena.
+    void OnEscenaCargada(Scene escena, LoadSceneMode modo)
+    {
+        StartCoroutine(ReconectarEscena());
+    }
+
+    IEnumerator ReconectarEscena()
+    {
+        // Esperar un frame para que todos los Start() de la escena hayan corrido.
+        yield return null;
+
+        // Reactivar controles por si quedaron desactivados (muerte interrumpida).
+        ControladorJugador controlador = GetComponent<ControladorJugador>();
+        if (controlador != null) controlador.enabled = true;
+
+        // Renotificar la UI con las vidas actuales para que los corazones
+        // se muestren correctamente en la nueva escena.
+        OnVidaCambiada?.Invoke(VidasActuales, vidasMax);
+        ActualizarUI();
     }
 
     void Start()
@@ -92,7 +138,10 @@ public class SaludJugador : MonoBehaviour
             tiempoRestante -= intervaloRapido;
         }
 
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        // Resetear vidas y volver al nivel 1 (build index 0)
+        VidasActuales = vidasMax;
+        OnVidaCambiada?.Invoke(VidasActuales, vidasMax);
+        SceneManager.LoadScene(0);
     }
 
     void ActualizarUI()

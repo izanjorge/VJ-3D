@@ -25,11 +25,24 @@ public class TrampaPinchos : MonoBehaviour
     {
         colisionadorDanio = GetComponent<Collider>();
 
-        // Estado inicial: pinchos escondidos y sin colisión de daño
-        SetY(alturaEscondido);
         if (colisionadorDanio != null)
+        {
+            // El BoxCollider del prefab cubre y=-0.5..0.5 (suelo).
+            // El jugador tiene su collider centrado en y=1.9 (cubre y=1.1..2.7).
+            // Ajustamos el trigger para que cubra la altura del cuerpo del jugador.
+            BoxCollider box = colisionadorDanio as BoxCollider;
+            if (box != null)
+            {
+                box.center = new Vector3(0f, 1.9f, 0f);
+                box.size   = new Vector3(1f, 1.8f, 1f);  // cubre y=1.0..2.8
+            }
+            // Convertir a trigger: detecta al jugador sin bloquearlo físicamente
+            colisionadorDanio.isTrigger = true;
+            // Estado inicial: pinchos escondidos, sin daño
             colisionadorDanio.enabled = false;
+        }
 
+        SetY(alturaEscondido);
         StartCoroutine(CicloTrampa());
     }
 
@@ -46,9 +59,7 @@ public class TrampaPinchos : MonoBehaviour
 
     IEnumerator Subir()
     {
-        // Activamos el daño en cuanto empiezan a salir
-        if (colisionadorDanio != null) colisionadorDanio.enabled = true;
-
+        // Animamos la subida SIN activar daño (los pinchos aún no son visibles)
         float tiempo = 0f;
         while (tiempo < duracionSubida)
         {
@@ -60,10 +71,15 @@ public class TrampaPinchos : MonoBehaviour
             yield return null;
         }
         SetY(alturaFuera);
+        // Activamos el daño solo cuando los pinchos están COMPLETAMENTE ARRIBA
+        if (colisionadorDanio != null) colisionadorDanio.enabled = true;
     }
 
     IEnumerator Bajar()
     {
+        // Desactivamos el daño ANTES de empezar a bajar: ya no son peligrosos
+        if (colisionadorDanio != null) colisionadorDanio.enabled = false;
+
         float tiempo = 0f;
         while (tiempo < duracionBajada)
         {
@@ -74,9 +90,6 @@ public class TrampaPinchos : MonoBehaviour
             yield return null;
         }
         SetY(alturaEscondido);
-
-        // Solo quitamos el daño cuando están completamente escondidos
-        if (colisionadorDanio != null) colisionadorDanio.enabled = false;
     }
 
     void SetY(float y)

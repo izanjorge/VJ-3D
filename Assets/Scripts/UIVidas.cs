@@ -16,12 +16,17 @@ public class UIVidas : MonoBehaviour
 
     void Start()
     {
+        // Usar siempre el singleton persistente para evitar coger el duplicado
+        // que Awake() acaba de marcar para destruir (VidasActuales = 0).
+        if (saludJugador == null)
+            saludJugador = SaludJugador.Instancia;
+
         if (saludJugador == null)
             saludJugador = FindFirstObjectByType<SaludJugador>();
 
         saludJugador.OnVidaCambiada += ActualizarIconos;
 
-        ActualizarIconos(saludJugador.VidasActuales, iconosVida.Length);
+        ActualizarIconos(saludJugador.VidasActuales, saludJugador.vidasMax);
     }
 
     void OnDestroy()
