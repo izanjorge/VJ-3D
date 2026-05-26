@@ -23,21 +23,7 @@ public class ControladorSlime : MonoBehaviour
 
     void Update()
     {
-        // Movimiento con WASD o Flechas
-        if (!estaMoviendose)
-        {
-            if (Input.GetKeyDown(KeyCode.I))
-                StartCoroutine(MoverSlime(Vector3.forward));
-
-            else if (Input.GetKeyDown(KeyCode.K))
-                StartCoroutine(MoverSlime(Vector3.back));
-
-            else if (Input.GetKeyDown(KeyCode.J))
-                StartCoroutine(MoverSlime(Vector3.left));
-
-            else if (Input.GetKeyDown(KeyCode.L))
-                StartCoroutine(MoverSlime(Vector3.right));
-        }
+        // Movimiento por teclado desactivado (modelo estático para colocación en niveles)
     }
 
     IEnumerator MoverSlime(Vector3 direccion)

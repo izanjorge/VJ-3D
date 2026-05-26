@@ -3,7 +3,17 @@ guid: 0e37e91af57046346970dbabfa8be846
 ModelImporter:
   serializedVersion: 24200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: TexturaCuboInterno
+    second: {fileID: 2100000, guid: 227c6f5356f3d3f40ae957ad79f01b0e, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: TexturaTransparenteCuboExterior
+    second: {fileID: 2100000, guid: e1f135e5650a5f344a3ad5ca9ef38262, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0

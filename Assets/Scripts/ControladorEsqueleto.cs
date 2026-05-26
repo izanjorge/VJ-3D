@@ -13,26 +13,7 @@ public class ControladorEsqueleto : MonoBehaviour
 
     void Update()
     {
-        // Solo puede moverse o atacar si no está ya haciendo otra cosa
-        if (!estaMoviendose && !estaAtacando)
-        {
-            // Movimiento con T, G, F, H
-            if (Input.GetKeyDown(KeyCode.T))
-                StartCoroutine(MoverEsqueleto(Vector3.forward));
-
-            else if (Input.GetKeyDown(KeyCode.G))
-                StartCoroutine(MoverEsqueleto(Vector3.back));
-
-            else if (Input.GetKeyDown(KeyCode.F))
-                StartCoroutine(MoverEsqueleto(Vector3.left));
-
-            else if (Input.GetKeyDown(KeyCode.H))
-                StartCoroutine(MoverEsqueleto(Vector3.right));
-
-            // Ataque con la Y
-            else if (Input.GetKeyDown(KeyCode.Y))
-                StartCoroutine(AtaqueAgresivo());
-        }
+        // Movimiento por teclado desactivado (modelo estático para colocación en niveles)
     }
 
     IEnumerator MoverEsqueleto(Vector3 direccion)

@@ -25,18 +25,7 @@ public class ControladorPanda : MonoBehaviour
 
     void Update()
     {
-        if (!estaMoviendose && puedeAtacar)
-        {
-            // Movimiento (Teclado numérico según tu código)
-            if (Input.GetKeyDown(KeyCode.Keypad5)) StartCoroutine(Mover(Vector3.forward));
-            else if (Input.GetKeyDown(KeyCode.Keypad2)) StartCoroutine(Mover(Vector3.back));
-            else if (Input.GetKeyDown(KeyCode.Keypad1)) StartCoroutine(Mover(Vector3.left));
-            else if (Input.GetKeyDown(KeyCode.Keypad3)) StartCoroutine(Mover(Vector3.right));
-
-            // Ataque (Barra espaciadora)
-            else if (Input.GetKeyDown(KeyCode.Space))
-                StartCoroutine(LanzarCuchillo());
-        }
+        // Movimiento por teclado desactivado (modelo estático para colocación en niveles)
     }
 
     IEnumerator Mover(Vector3 direccion)
