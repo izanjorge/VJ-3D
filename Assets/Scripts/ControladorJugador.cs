@@ -190,13 +190,16 @@ public class ControladorJugador : MonoBehaviour
 
     void ManejarCambioEscenas()
     {
+        // Build Settings: 0=MainMenu, 1=Creditos, 2=Nivel0 ... 11=Nivel9
+        // Tecla 0 -> Nivel0 (indice 2), Tecla 9 -> Nivel9 (indice 11)
         for (int i = 0; i <= 9; i++)
         {
             if (Input.GetKeyDown(i.ToString()))
             {
-                if (i < SceneManager.sceneCountInBuildSettings)
+                int indiceEscena = i + 2;
+                if (indiceEscena < SceneManager.sceneCountInBuildSettings)
                 {
-                    SceneManager.LoadScene(i);
+                    SceneManager.LoadScene(indiceEscena);
                 }
             }
         }
