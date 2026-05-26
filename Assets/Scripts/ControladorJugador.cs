@@ -169,6 +169,7 @@ public class ControladorJugador : MonoBehaviour
         Vector3 posicionInicial = transform.position;
         Vector3 posicionDestino = posicionInicial + (direccion * distanciaPaso);
 
+        LimpiarCasilla(posicionInicial);
         transform.forward = direccion;
 
         float tiempoTranscurrido = 0;
@@ -185,7 +186,20 @@ public class ControladorJugador : MonoBehaviour
         }
 
         transform.position = posicionDestino;
+        LimpiarCasilla(posicionDestino);
         estaMoviendose = false;
+    }
+
+    // Elimina el rastro de slime de la casilla pisada (integrado desde feature/slime)
+    private void LimpiarCasilla(Vector3 posicion)
+    {
+        Collider[] objetosPisados = Physics.OverlapSphere(posicion, 0.1f);
+        foreach (Collider obj in objetosPisados)
+        {
+            Casilla casilla = obj.GetComponentInParent<Casilla>();
+            if (casilla != null)
+                casilla.LimpiarSlime();
+        }
     }
 
     void ManejarCambioEscenas()
