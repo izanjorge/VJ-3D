@@ -10,6 +10,7 @@ TagManager:
   - Box
   - Obstaculo
   - Jugador
+  - Valla
   layers:
   - Default
   - TransparentFX

@@ -14,7 +14,7 @@ public class LevelGenerator : MonoBehaviour
     [Header("Trampas")]
     public GameObject trampaPinchosPrefab;
     public GameObject trampaFlechasPrefab;
-    public GameObject trampaLapidaPrefab;
+    public GameObject sueloLapidaPrefab;   // FloorTile + lápida + trigger de daño
 
     [Header("Obstáculos y Decoración")]
     public GameObject barrilPrefab;
@@ -46,7 +46,7 @@ public class LevelGenerator : MonoBehaviour
     const float ALTURA_MUROS = 1.0f;
 
     // Filas variables por nivel (tamaños distintos = niveles más creativos)
-    static readonly int[] FILAS_POR_NIVEL = { 8, 10, 10, 12, 14, 12, 14, 18, 14, 18 };
+    static readonly int[] FILAS_POR_NIVEL = { 8, 10, 10, 12, 14, 12, 14, 24, 14, 18 };
 
     // ──────────────────────────────────────────────────────────────────────
     //  DISEÑO DE LOS 10 NIVELES
@@ -62,191 +62,194 @@ public class LevelGenerator : MonoBehaviour
     static readonly string[][] NIVELES = new string[][]
     {
         // ── NIVEL 0 (8 filas) · "Sala de Bienvenida" ──────── Verde
-        // Tutorial puro. Sin trampas. Aprende a moverte y recoger monedas.
+        // Tutorial puro. Introduce cajas (empujables) y vallas (bloquean paso).
         new string[] {
             ".......",  // f=0  jugador en c=3
             "...$...",  // f=1  moneda fácil al centro
-            ".C...C.",  // f=2  cajas decorativas
+            "..C.C..",  // f=2  cajas c=2,c=4 (empujables, no en esquinas)
             ".......",  // f=3
-            "R..$..R",  // f=4  rocas + moneda ligeramente descentrada
-            "..C.C..",  // f=5  cajas
-            "B.....B",  // f=6  barriles en las esquinas
+            "V..$..V",  // f=4  vallas c=0,c=6 + moneda: aprende que las vallas bloquean
+            "..C.C..",  // f=5  más cajas
+            "B.....B",  // f=6  barriles decorativos
             ".......",  // f=7
         },
 
         // ── NIVEL 1 (10 filas) · "Taller de Barriles" ────── Verde
-        // Barriles y cajas forman pasillos. Primeros pinchos al final.
+        // Pasillos de barriles, cajas fuera de esquinas, primeros pinchos asimétricos.
         new string[] {
             ".......",  // f=0
-            "B.B.B.B",  // f=1  barrera de barriles con huecos en c=1,3,5
+            "B.B.B..",  // f=1  barrera de barriles, hueco en c=5,c=6
             "...$...",  // f=2
-            "C.....C",  // f=3  cajas en las esquinas
+            ".C...C.",  // f=3  cajas c=1,c=5 (nunca en esquinas c=0/c=6)
             ".......",  // f=4
-            ".J.$.J.",  // f=5  jarrones con moneda central
-            ".......",  // f=6
-            "..PPP..",  // f=7  primeros pinchos
-            ".$...J.",  // f=8  moneda difícil izquierda + jarrón
+            ".J.$.J.",  // f=5  jarrones + moneda central
+            "P.....P",  // f=6  pinchos en los flancos
+            ".PP.PP.",  // f=7  pinchos asimétrico: c=1,2,4,5
+            ".$.....",  // f=8  moneda izquierda (asimétrico)
             ".......",  // f=9
         },
 
         // ── NIVEL 2 (10 filas) · "El Slalom" ─────────────── Verde
-        // Pinchos forman bloques alternos: zigzaguea de lado a lado.
+        // Slalom con pinchos y vallas asimétricas que limitan rutas.
         new string[] {
             ".......",  // f=0
-            "V.....V",  // f=1
+            "V.V....",  // f=1  vallas c=0,c=2 (asimétricas, limitan movimiento)
             ".......",  // f=2
-            "..PPPPP",  // f=3  hueco izquierdo (c=0,1)
-            ".$.C...",  // f=4  moneda izquierda + caja
-            "PPPPP..",  // f=5  hueco derecho (c=5,6)
-            "...C.$.",  // f=6  caja + moneda difícil derecha
-            "..PPPPP",  // f=7  hueco izquierdo otra vez
-            "B.....B",  // f=8
+            "..PPPPP",  // f=3  hueco izquierdo c=0,c=1
+            ".$.C...",  // f=4  moneda + caja c=3
+            "PPPP...",  // f=5  hueco derecho c=4,c=5,c=6 (asimétrico)
+            "V.....V",  // f=6  vallas flancos
+            "...C.$.",  // f=7  caja c=3 + moneda derecha
+            "..PPPP.",  // f=8  pinchos c=2-5, huecos c=0,c=1,c=6
             ".......",  // f=9
         },
 
         // ── NIVEL 3 (12 filas) · "Catacumbas" ────────────── Amarillo  ★SUELO CAE★
-        // El suelo empieza a caer. Sin lápidas aún: solo obstáculos y pinchos.
+        // Pinchos asimétricos, cajas fuera de esquinas, primeras vallas como obstáculo real.
         new string[] {
             ".......",  // f=0
-            "V..$..V",  // f=1  vallas + moneda
-            "..PPP..",  // f=2
-            "C.....C",  // f=3  cajas en los flancos
-            ".J.$.J.",  // f=4  jarrones + moneda central
-            "P.....P",  // f=5  pinchos en los flancos
-            "R..C..R",  // f=6  rocas + caja central
+            "V.....V",  // f=1  vallas flancos (fuerzan pasar por el centro)
+            "PPP....",  // f=2  pinchos izquierda asimétrico c=0,1,2
+            ".C...C.",  // f=3  cajas c=1,c=5
+            ".J.$.J.",  // f=4  jarrones + moneda
+            "PP....P",  // f=5  pinchos asimétrico c=0,1,6
+            "R..C..R",  // f=6  rocas flancos + caja central c=3
             "...$...",  // f=7
-            "B.PPP.B",  // f=8  barriles + pinchos
-            "C.....C",  // f=9  cajas
-            ".$...$.",  // f=10 monedas difíciles (c=1 y c=5)
+            "B.PPP.B",  // f=8  barriles + pinchos centrales
+            ".C.....",  // f=9  caja c=1 (sola, asimétrica)
+            ".$...$.",  // f=10 monedas difíciles en los lados
             ".......",  // f=11
         },
 
         // ── NIVEL 4 (14 filas) · "Flechas por Primera Vez" ── Amarillo  ★SUELO CAE★
-        // Flechas laterales por primera vez. Aprende el timing de cruce.
+        // Cajas en filas de flechas: empújalas a c=1 ó c=5 para bloquear el proyectil.
+        // Vallas en la trayectoria reducen posiciones seguras de cruce.
         new string[] {
             ".......",  // f=0
-            "B.B.B..",  // f=1  barrera de barriles, hueco derecho en c=5,6
+            "B.B.B..",  // f=1  barrera barriles, hueco c=5,c=6
             "...$...",  // f=2
-            "P.P.P.P",  // f=3  pinchos alternos (huecos en c=1,3,5)
+            "P.PP..P",  // f=3  pinchos asimétrico c=0,2,3,6
             ".......",  // f=4
-            "F.....F",  // f=5  PRIMERAS FLECHAS
-            "C..$..C",  // f=6  cajas + moneda descentrada
+            "F.V.C.F",  // f=5  FLECHAS + valla c=2 + caja c=4 (empuja a c=5 para bloquear flecha dcha)
+            ".......",  // f=6
             "J.P.P.J",  // f=7  jarrones + pinchos
             ".......",  // f=8
-            "F.....F",  // f=9  más flechas
-            ".$...R.",  // f=10 moneda difícil izquierda + roca
-            "R.C.C.R",  // f=11 rocas + cajas
+            "F.C.V.F",  // f=9  FLECHAS + caja c=2 + valla c=4 (empuja a c=1 para bloquear flecha izq)
+            ".$...R.",  // f=10 moneda izquierda + roca
+            "PPP.PP.",  // f=11 pinchos densos, hueco c=3
             "...$...",  // f=12
             ".......",  // f=13
         },
 
         // ── NIVEL 5 (12 filas) · "Corredor de Flechas" ─────── Amarillo  ★SUELO CAE★
-        // Flechas frecuentes + primera lápida (sorpresa al final). Timing crucial.
+        // Vallas DENTRO de filas con flechas: solo 2 posiciones seguras de cruce.
         new string[] {
             ".......",  // f=0
-            "F.....F",  // f=1  flechas
-            "..P.P..",  // f=2
-            ".......",  // f=3
-            "C..$..C",  // f=4  cajas + moneda
+            "F.C.V.F",  // f=1  flechas + caja c=2 + valla c=4
+            ".VP.P..",  // f=2  valla c=1 en trayectoria + pinchos asimétrico
+            "..P.P..",  // f=3
+            ".C.$...",  // f=4  caja c=1 + moneda c=3
             "F.P.P.F",  // f=5  flechas + pinchos
-            "B.....B",  // f=6
-            "..PPP..",  // f=7
+            "V.....V",  // f=6  vallas flancos (reducen anchura de juego)
+            "PPP.PP.",  // f=7  pinchos densos, hueco c=3
             ".......",  // f=8
-            "F.....F",  // f=9
+            "F.V.C.F",  // f=9  flechas + valla c=2 + caja c=4
             "R..$..R",  // f=10 rocas + moneda
-            "...L...",  // f=11 1 lápida central (sorpresa al final)
+            "...L...",  // f=11 lápida central (sorpresa al final)
         },
 
         // ── NIVEL 6 (14 filas) · "Catacumbas de la Perdición" ── Rojo  ★SUELO CAE★
-        // Intensidad alta. Flechas, pinchos y lápidas combinados.
+        // Máxima combinación: vallas + pinchos en fila de flechas → solo c=1 y c=5 libres.
         new string[] {
             ".......",  // f=0
-            "..P.P..",  // f=1
-            "C.....C",  // f=2
+            "..P.PP.",  // f=1  pinchos asimétrico c=2,4,5
+            ".C.....",  // f=2  caja c=1
             "...$...",  // f=3
-            "F.PPP.F",  // f=4  flechas + pinchos centrales
+            "F.VPV.F",  // f=4  FLECHAS + vallas c=2,c=4 + pinchos c=3 → solo c=1,c=5 libres
             ".......",  // f=5
-            "P.C.C.P",  // f=6  pinchos flancos + cajas
+            "P.C.C.P",  // f=6  pinchos flancos + cajas c=2,c=4
             ".$...$.",  // f=7  monedas difíciles en los lados
-            "F.....F",  // f=8
-            "..PPP..",  // f=9
-            "..L....",  // f=10 1ª lápida (fuera del centro)
-            "F.P.P.F",  // f=11
-            "B..L..B",  // f=12 2ª lápida + barriles
+            "F.V...F",  // f=8  flechas + valla c=2 (solo c=1,c=3,c=4,c=5 libres)
+            "PPP.PP.",  // f=9  pinchos densos, hueco c=3
+            "..L....",  // f=10 1ª lápida c=2 (asimétrica)
+            "F.P.V.F",  // f=11 flechas + pinchos c=2 + valla c=4
+            "B..L..B",  // f=12 barriles + 2ª lápida c=3
             ".......",  // f=13
         },
 
-        // ── NIVEL 7 (18 filas) · "La S Letal" ───────────────── Rojo  ★SUELO CAE★  ★HABILIDAD★
-        // Camino en S con casillas seguras (.) dispersas. El resto es vacío (caída libre).
-        // Recorrido: c=3 vertical → cruce izquierdo (c=0) → gauntlet → cruce derecho → c=3 vertical
+        // ── NIVEL 7 (24 filas) · "La S Letal × 2" ──────────── Rojo  ★SUELO CAE★  ★HABILIDAD★
+        // DOS bucles en S completos sobre el vacío. El jugador hace la S hacia la izquierda,
+        // vuelve al centro, la repite hacia la derecha, y culmina con puerta de flechas + muro frontal.
         //
-        //  ___.___  corredor central (c=3 seguro, vacío alrededor)
-        //  F.....F  puerta de flechas: flechas c=0 y c=6, suelo seguro en el medio
-        //  .PP.___  curva izquierda: seguro c=0 y c=3, pinchos c=1-2 (cruzar con cuidado)
-        //  .______  borde izquierdo (solo c=0 seguro)
-        //  .PPPPP.  gauntlet horizontal: seguro c=0 y c=6, pinchos c=1-5
-        //  ______.  borde derecho (solo c=6 seguro)
-        //  ___.PP.  curva derecha: seguro c=3 y c=6, pinchos c=4-5 (cruzar con cuidado)
+        //  Bucle 1 (f=4-10):  c=3 → izquierda (gauntlet) → c=6
+        //  Bucle 2 (f=14-20): c=3 → derecha (gauntlet)   → c=0
         new string[] {
-            "___.___",  // f=0  corredor: solo c=3 seguro (jugador spawn)
-            "___.___",  // f=1  corredor
-            "___.___",  // f=2  corredor
-            "F.....F",  // f=3  PUERTA DE FLECHAS: flechas c=0,6; suelo seguro c=1-5
-            "___.___",  // f=4  corredor
-            ".PP.___",  // f=5  CURVA IZQ: seguro c=0,3; pinchos c=1,2; vacío c=4-6
-            ".______",  // f=6  BORDE IZQ: solo c=0 seguro, vacío resto
-            ".PPPPP.",  // f=7  GAUNTLET: seguro c=0 y c=6; pinchos c=1-5
-            "______.",  // f=8  BORDE DER: solo c=6 seguro, vacío resto
-            "______.",  // f=9  BORDE DER: solo c=6 seguro (momento de respiro)
-            "___.PP.",  // f=10 CURVA DER: seguro c=3,6; pinchos c=4,5; vacío c=0-2
-            "___.___",  // f=11 corredor
-            "___.___",  // f=12 corredor
-            "F.....F",  // f=13 PUERTA DE FLECHAS: flechas c=0,6; suelo seguro c=1-5
-            "_GG.GG_",  // f=14 MURO DE FLECHAS FRONTALES: c=1,2 y c=4,5 con ola escalonada
-            "___.___",  // f=15 corredor seguro
-            "___.___",  // f=16 corredor final
-            ".......",  // f=17 SALIDA - suelo seguro
+            "___.___",  // f=0   spawn corredor c=3
+            "___.___",  // f=1
+            "___.___",  // f=2
+            "F.....F",  // f=3   PUERTA 1: flechas c=0,6; suelo c=1-5
+            "___.___",  // f=4
+            ".PP.___",  // f=5   CURVA IZQ 1: suelo c=0,c=3; pinchos c=1,2; vacío c=4-6
+            ".______",  // f=6   BORDE IZQ: solo c=0 seguro
+            ".PPPPP.",  // f=7   GAUNTLET 1: suelo c=0 y c=6; pinchos c=1-5
+            "______.",  // f=8   BORDE DER: solo c=6 seguro
+            "______.",  // f=9   BORDE DER (respiro)
+            "___.PP.",  // f=10  CURVA DER 1: suelo c=3,c=6; pinchos c=4,5; vacío c=0-2
+            "___.___",  // f=11  corredor c=3
+            "F.....F",  // f=12  PUERTA 2
+            "___.___",  // f=13
+            "___.PP.",  // f=14  CURVA DER 2: suelo c=3,c=6; pinchos c=4,5 (ahora va hacia c=6)
+            "______.",  // f=15  BORDE DER: solo c=6 seguro
+            ".PPPPP.",  // f=16  GAUNTLET 2
+            ".______",  // f=17  BORDE IZQ: solo c=0 seguro
+            ".______",  // f=18  BORDE IZQ (respiro)
+            ".PP.___",  // f=19  CURVA IZQ 2: suelo c=0,c=3; pinchos c=1,2 (vuelve a c=3)
+            "___.___",  // f=20  corredor c=3
+            "F.....F",  // f=21  PUERTA 3
+            "_GG.GG_",  // f=22  MURO FRONTAL: c=1,2,4,5 con ola escalonada
+            ".......",  // f=23  SALIDA - suelo completo
         },
 
         // ── NIVEL 8 (14 filas) · "Mazmorra de la Muerte" ─────── Rojo  ★SUELO CAE★
-        // Máxima densidad. Hay una sola ruta segura en cada fila.
+        // Flechas con vallas dentro de la trayectoria: el cruce más difícil del juego.
         new string[] {
             ".......",  // f=0
-            "C..B..C",  // f=1  cajas + barril (decoración)
-            "F..$..F",  // f=2  flechas + moneda descentrada
-            "PP.P.PP",  // f=3  huecos mínimos en c=2 y c=4
-            "..C.C..",  // f=4  cajas
-            "F.P.P.F",  // f=5  flechas + pinchos
+            ".C.B.C.",  // f=1  cajas c=1,c=5 + barril c=3 (no en esquinas)
+            "F..$..F",  // f=2  flechas + moneda
+            "PP.P.PP",  // f=3  pinchos, huecos c=2,c=4
+            "..C.C..",  // f=4  cajas c=2,c=4
+            "F.VP.VF",  // f=5  FLECHAS + vallas c=2,c=5 + pinchos c=3 → solo c=1,c=4 libres
             "...$...",  // f=6
-            "BPP.PPB",  // f=7  barriles flanqueando pinchos, hueco en c=3
-            "F.....F",  // f=8
-            "P...L.P",  // f=9  pinchos flancos + 1ª lápida
-            ".$...$.",  // f=10 monedas difíciles en los lados
+            "BPP.PPB",  // f=7  barriles + pinchos, hueco c=3
+            "F.V...F",  // f=8  flechas + valla c=2
+            "P...L.P",  // f=9  pinchos c=0,c=6 + lápida c=4
+            ".$...$.",  // f=10 monedas difíciles
             "F.PPP.F",  // f=11 flechas + pinchos centrales
-            "B..L..B",  // f=12 2ª lápida + barriles
+            "B..L..B",  // f=12 barriles + 2ª lápida c=3
             ".......",  // f=13
         },
 
         // ── NIVEL 9 (18 filas) · "Arena del Jefe Final" ──────── Morado
-        // Sin caída de suelo. Arena amplia para el Boss (4×4 casillas, aprox. c=2-5, f=6-9).
+        // Sin caída. Las 7 columnas completamente libres para maximizar el espacio de juego.
+        // Monedas en los extremos incentivan al jugador a moverse por todo el ancho.
         new string[] {
             ".......",  // f=0
-            ".J...J.",  // f=1  jarrones decorativos
-            "..P.P..",  // f=2  pinchos ornamentales
+            ".J...J.",  // f=1  jarrones c=1,c=5 (decorativos)
+            ".$...$.",  // f=2  monedas en los extremos (incentiva usar el ancho)
             ".......",  // f=3
-            "R.....R",  // f=4  rocas en flancos
+            "..P.P..",  // f=4  pinchos ornamentales
             ".......",  // f=5
-            ".......",  // f=6  zona boss (4×4 centrado: c=2-5, f=6-9)
+            ".......",  // f=6  zona boss: área despejada 7×6 (f=6-11)
             ".......",  // f=7
             ".......",  // f=8
             ".......",  // f=9
             ".......",  // f=10
-            "R.....R",  // f=11 rocas simétricas
-            ".......",  // f=12
-            "V.....V",  // f=13 vallas
-            "..P.P..",  // f=14
-            ".......",  // f=15
-            "C.....C",  // f=16 cajas
+            "...L...",  // f=11 lápida central (peligro zona de paso)
+            ".C...C.",  // f=12 cajas c=1,c=5 (pueden usarse como escudo)
+            "V.....V",  // f=13 vallas flancos (crean sección visual sin cerrar el ancho)
+            "..P.P..",  // f=14 pinchos
+            ".$...$.",  // f=15 monedas difíciles en los extremos
+            ".C...C.",  // f=16 cajas c=1,c=5
             ".......",  // f=17
         },
     };
@@ -264,7 +267,7 @@ public class LevelGenerator : MonoBehaviour
 
         // Activar caída del suelo en niveles 3-8 (no en tutorial ni en boss)
         if (nivelActual >= 3 && nivelActual <= 8 && gestorCaida != null)
-            gestorCaida.Iniciar(objetosPorFila, filas, player);
+            gestorCaida.Iniciar(objetosPorFila, filas, player, nivelActual);
     }
 
     // ── GENERACIÓN DEL MAPA ─────────────────────────────────────────────
@@ -280,8 +283,8 @@ public class LevelGenerator : MonoBehaviour
                 Vector3 pos = new Vector3(c - OFFSET_COL, 0, f);
                 char tile = mapa[f][c];
 
-                // SueloTrampa (P) ya lleva su propia base; vacío (_) no genera suelo
-                if (tile != 'P' && tile != '_')
+                // P y L llevan su propia base (SueloTrampa / SueloLapida); _ no genera suelo
+                if (tile != 'P' && tile != '_' && tile != 'L')
                 {
                     GameObject suelo = SpawnRegistrado(floorTilePrefab, pos, Quaternion.identity, f);
                     if (mat != null && suelo != null && suelo.TryGetComponent(out Renderer r))
@@ -316,7 +319,9 @@ public class LevelGenerator : MonoBehaviour
                 break;
 
             case 'L':
-                SpawnRegistrado(trampaLapidaPrefab, pos + Vector3.up, Quaternion.identity, fila);
+                // SueloLapida ya incluye el tile de suelo; se spawna en pos (Y=0).
+                // El trigger de daño y DetectorGolpe están configurados en el prefab.
+                SpawnRegistrado(sueloLapidaPrefab, pos, Quaternion.identity, fila);
                 break;
 
             // ── OBSTÁCULOS / DECORACIÓN ────────────────────────────────
@@ -360,23 +365,25 @@ public class LevelGenerator : MonoBehaviour
         float zFondo     = filas - 0.5f;
 
         // ── Pared del FONDO (siempre 5 piezas para COLUMNAS=7) ──────────
+        // Se registra en la última fila (puerta), que NO cae en SecuenciaCaida.
         float[] posXFondo = { -2.5f, -1f, 0f, 1f, 2.5f };
         foreach (float x in posXFondo)
         {
             GameObject prefab = x == 0f            ? pared3Prefab :
                                 (x == -1f || x == 1f) ? pared2Prefab :
                                                         pared1Prefab;
-            Spawn(prefab, new Vector3(x, ALTURA_MUROS, zFondo), Quaternion.Euler(0, 90, 0));
+            SpawnRegistrado(prefab, new Vector3(x, ALTURA_MUROS, zFondo), Quaternion.Euler(0, 90, 0), filas - 1);
         }
 
         // ── Pared LATERAL IZQUIERDA (dinámica según número de filas) ────
+        // Cada pieza se registra en su fila correspondiente para caer con el suelo.
         int numPiezasLateral = Mathf.CeilToInt(filas / 2f);
         for (int i = 0; i < numPiezasLateral; i++)
         {
             float zPos = (i * 2) + 0.5f;
             if (zPos >= zFondo) continue; // evitar solapamiento con pared del fondo
             GameObject prefab = (i % 2 == 1) ? pared2Prefab : pared1Prefab;
-            Spawn(prefab, new Vector3(xIzquierda, ALTURA_MUROS, zPos), Quaternion.identity);
+            SpawnRegistrado(prefab, new Vector3(xIzquierda, ALTURA_MUROS, zPos), Quaternion.identity, i * 2);
         }
     }
 

@@ -51,7 +51,7 @@ MonoBehaviour:
   pared3Prefab: {fileID: 0}
   trampaPinchosPrefab: {fileID: 3226652053450643602, guid: 8a486a58e253d6f48896f3719ab5077f, type: 3}
   trampaFlechasPrefab: {fileID: 3735256001333624474, guid: df44e7eed5870764780eaa85c0aa37d7, type: 3}
-  trampaLapidaPrefab: {fileID: 5707318452249185376, guid: ca87e78684a519f4ab2449c269a423bb, type: 3}
+  sueloLapidaPrefab: {fileID: 7711480355566082539, guid: 18ac755d6d7f8774a88f1c9633767d05, type: 3}
   barrilPrefab: {fileID: 7978451050072388067, guid: c96f7c98df8a19a4f9426af849b28d31, type: 3}
   jarronPrefab: {fileID: 5603896044248792450, guid: debbeac27949deb43b6247e31a473d82, type: 3}
   cajaPrefab: {fileID: 296296065157652429, guid: 2d5e405f4b76ba24fbf45cdbc4129f8f, type: 3}
@@ -64,7 +64,7 @@ MonoBehaviour:
   matRojo: {fileID: 2100000, guid: 24be9d819d7dd3f48adcb77e41c684be, type: 2}
   matMorado: {fileID: 2100000, guid: 79bc4b2131737864b9830b5d7777eb9b, type: 2}
   nivelActual: 0
-  gestorCaida: {fileID: 0}
+  gestorCaida: {fileID: 556915001015731872}
 --- !u!114 &556915001015731872
 MonoBehaviour:
   m_ObjectHideFlags: 0

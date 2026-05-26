@@ -1,7 +1,6 @@
 using UnityEngine;
 using System.Collections;
 using UnityEngine.SceneManagement;
-using TMPro;
 
 public class ControladorJugador : MonoBehaviour
 {
@@ -16,7 +15,10 @@ public class ControladorJugador : MonoBehaviour
 
     [Header("Economía del Juego")]
     public int numMonedas = 0;
-    public TextMeshProUGUI marcadorTexto;
+
+    // Igual que SaludJugador.OnVidaCambiada: cualquier UI de la escena
+    // activa se suscribe a este evento para mostrar el contador.
+    public System.Action<int> OnMonedasCambiadas;
 
     // --- NUEVO: Máquina de estados básica ---
     private bool estaMoviendose = false;
@@ -53,10 +55,27 @@ public class ControladorJugador : MonoBehaviour
 
                     if (HaySueloEn(destino) && !HayObstaculoEnDestino(destino))
                     {
+                        // Casilla libre: mover normalmente
                         StartCoroutine(MoverJugador(direccion));
+                    }
+                    else if (HaySueloEn(destino))
+                    {
+                        // Hay un obstáculo — ¿es una caja empujable?
+                        CajaEmpujable caja = ObtenerCajaEn(destino);
+                        if (caja != null && caja.IntentarEmpujar(direccion, 1f / velocidad))
+                        {
+                            // La caja cedió: el jugador también avanza (animaciones simultáneas)
+                            StartCoroutine(MoverJugador(direccion));
+                        }
+                        else
+                        {
+                            // Obstáculo fijo o caja bloqueada: solo giramos hacia él
+                            transform.forward = direccion;
+                        }
                     }
                     else
                     {
+                        // Sin suelo al frente: solo giramos (evita caer al vacío)
                         transform.forward = direccion;
                     }
                 }
@@ -144,10 +163,7 @@ public class ControladorJugador : MonoBehaviour
 
     void ActualizarMarcador()
     {
-        if (marcadorTexto != null)
-        {
-            marcadorTexto.text = "Monedas: " + numMonedas;
-        }
+        OnMonedasCambiadas?.Invoke(numMonedas);
     }
 
     bool HaySueloEn(Vector3 posicionDestino)
@@ -161,6 +177,24 @@ public class ControladorJugador : MonoBehaviour
         Vector3 dimensionesMitad = new Vector3(0.4f, 1f, 0.4f);
         // Ignoramos Triggers explícitamente: las trampas son Triggers y no deben bloquear el movimiento
         return Physics.CheckBox(centroCaja, dimensionesMitad, Quaternion.identity, capaObstaculos, QueryTriggerInteraction.Ignore);
+    }
+
+    /// <summary>
+    /// Busca un componente CajaEmpujable en la posición dada.
+    /// Devuelve null si el obstáculo no es una caja.
+    /// </summary>
+    CajaEmpujable ObtenerCajaEn(Vector3 posicionDestino)
+    {
+        Vector3 centro = posicionDestino + Vector3.up;
+        Vector3 mitad  = new Vector3(0.4f, 1f, 0.4f);
+        Collider[] cols = Physics.OverlapBox(centro, mitad, Quaternion.identity, capaObstaculos, QueryTriggerInteraction.Ignore);
+        foreach (Collider col in cols)
+        {
+            CajaEmpujable caja = col.GetComponentInParent<CajaEmpujable>()
+                              ?? col.GetComponent<CajaEmpujable>();
+            if (caja != null) return caja;
+        }
+        return null;
     }
 
     IEnumerator MoverJugador(Vector3 direccion)

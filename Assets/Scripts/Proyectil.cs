@@ -61,8 +61,9 @@ public class Proyectil : MonoBehaviour
             return;
         }
 
-        // Destruirse al golpear cualquier sólido (pared, obstáculo, suelo)
-        if (!other.isTrigger)
+        // Destruirse al golpear cualquier sólido EXCEPTO las Vallas,
+        // que son transparentes a los proyectiles por diseño de juego.
+        if (!other.isTrigger && !other.CompareTag("Valla"))
             Destroy(gameObject);
     }
 }

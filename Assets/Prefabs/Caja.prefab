@@ -9,6 +9,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 82c5c28f2f77fd641ba66b9a454023fb, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 82c5c28f2f77fd641ba66b9a454023fb, type: 3}
       propertyPath: m_LocalPosition.x
       value: 1.6713693
       objectReference: {fileID: 0}
@@ -56,6 +60,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Caja
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 82c5c28f2f77fd641ba66b9a454023fb, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -63,6 +71,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 82c5c28f2f77fd641ba66b9a454023fb, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2164413946604908902}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 82c5c28f2f77fd641ba66b9a454023fb, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7252526792699732093}
   m_SourcePrefab: {fileID: 100100000, guid: 82c5c28f2f77fd641ba66b9a454023fb, type: 3}
 --- !u!1 &296296065157652429 stripped
 GameObject:
@@ -84,9 +95,27 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_ProvidesContacts: 1
   m_Enabled: 1
   serializedVersion: 3
   m_Size: {x: 0.6875, y: 0.6875, z: 0.6875}
   m_Center: {x: 0, y: 0.34375, z: 0}
+--- !u!114 &7252526792699732093
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 296296065157652429}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d4dc44710a899c04a899329376e1715e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CajaEmpujable
+  capaSuelo:
+    serializedVersion: 2
+    m_Bits: 64
+  capaObstaculos:
+    serializedVersion: 2
+    m_Bits: 128
