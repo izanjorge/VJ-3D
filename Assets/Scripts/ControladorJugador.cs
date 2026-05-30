@@ -20,12 +20,17 @@ public class ControladorJugador : MonoBehaviour
     // activa se suscribe a este evento para mostrar el contador.
     public System.Action<int> OnMonedasCambiadas;
 
-    // --- NUEVO: Máquina de estados básica ---
+    // --- Máquina de estados básica ---
     private bool estaMoviendose = false;
-    private bool estaAtacando = false; 
+    private bool estaAtacando = false;
+
+    // --- Ralentización por rastro de slime ---
+    private float velocidadNormal;
+    private Coroutine corutinRalentizacion;
 
     void Start()
     {
+        velocidadNormal = velocidad;
         ActualizarMarcador();
     }
 
@@ -149,12 +154,48 @@ public class ControladorJugador : MonoBehaviour
                                   ?? col.GetComponentInChildren<JarronDestruible>();
             if (jarron != null) { jarron.Romper(); break; }
 
-            // 2. Enemigo con componente Enemigo
-            Enemigo enemigo = col.GetComponentInParent<Enemigo>()
-                           ?? col.GetComponent<Enemigo>();
-            if (enemigo != null) { enemigo.RecibirGolpe(); break; }
+        }
+
+        Vector3 dirAtaque = transform.forward;
+
+        // ── Slimes ─────────────────────────────────────────────────────────
+        foreach (ControladorSlime slime in ControladorSlime.slimesActivos)
+        {
+            if (slime == null || slime.EstaMuerto) continue;
+            Vector3 h = VectorXZ(slime.transform.position - transform.position);
+            if (h.magnitude < 1.5f && Vector3.Dot(h.normalized, dirAtaque) > 0.5f)
+            { slime.RecibirGolpe(); return; }
+        }
+
+        // ── Esqueletos ─────────────────────────────────────────────────────
+        foreach (ControladorEsqueleto esq in ControladorEsqueleto.esqueletosActivos)
+        {
+            if (esq == null || esq.EstaMuerto) continue;
+            Vector3 h = VectorXZ(esq.transform.position - transform.position);
+            if (h.magnitude < 1.5f && Vector3.Dot(h.normalized, dirAtaque) > 0.5f)
+            { esq.RecibirGolpe(); return; }
+        }
+
+        // ── Pandas ─────────────────────────────────────────────────────────
+        foreach (ControladorPanda panda in ControladorPanda.pandasActivos)
+        {
+            if (panda == null || panda.EstaMuerto) continue;
+            Vector3 h = VectorXZ(panda.transform.position - transform.position);
+            if (h.magnitude < 1.5f && Vector3.Dot(h.normalized, dirAtaque) > 0.5f)
+            { panda.RecibirGolpe(); return; }
+        }
+
+        // ── Metagross (jefe — rango mayor, ángulo más amplio) ──────────────
+        if (ControladorMetagross.Instancia != null && !ControladorMetagross.Instancia.EstaMuerto)
+        {
+            Vector3 h = VectorXZ(ControladorMetagross.Instancia.transform.position - transform.position);
+            if (h.magnitude < 2.5f && Vector3.Dot(h.normalized, dirAtaque) > 0.3f)
+                ControladorMetagross.Instancia.RecibirGolpe();
         }
     }
+
+    // Aplana un vector a XZ (ignora la diferencia de altura)
+    static Vector3 VectorXZ(Vector3 v) => new Vector3(v.x, 0f, v.z);
 
     private void OnTriggerEnter(Collider other)
     {
@@ -229,14 +270,83 @@ public class ControladorJugador : MonoBehaviour
         }
 
         transform.position = posicionDestino;
+        ComprobarRastroSlime(posicionDestino); // Antes de limpiar para detectar el rastro
         LimpiarCasilla(posicionDestino);
+        ComprobarContactoEnemigos();
         estaMoviendose = false;
     }
 
-    // Elimina el rastro de slime de la casilla pisada (integrado desde feature/slime)
+    // ------------------------------------------------------------------
+    // Ralentización por rastro de slime
+    // ------------------------------------------------------------------
+
+    void ComprobarRastroSlime(Vector3 posicion)
+    {
+        Vector3 centroCasilla = new Vector3(Mathf.Round(posicion.x), 0f, Mathf.Round(posicion.z));
+        Collider[] cols = Physics.OverlapSphere(centroCasilla, 0.4f);
+        foreach (Collider col in cols)
+        {
+            Casilla casilla = col.GetComponentInParent<Casilla>();
+            if (casilla != null && casilla.tieneSlime)
+            {
+                AplicarRalentizacion(2f);
+                break;
+            }
+        }
+    }
+
+    void AplicarRalentizacion(float duracion)
+    {
+        if (corutinRalentizacion != null) StopCoroutine(corutinRalentizacion);
+        corutinRalentizacion = StartCoroutine(CorutinRalentizacion(duracion));
+    }
+
+    IEnumerator CorutinRalentizacion(float duracion)
+    {
+        velocidad = velocidadNormal * 0.5f;
+        yield return new WaitForSeconds(duracion);
+        velocidad = velocidadNormal;
+        corutinRalentizacion = null;
+    }
+
+    // ------------------------------------------------------------------
+    // Contacto con cualquier enemigo al aterrizar en una casilla
+    // ------------------------------------------------------------------
+
+    void ComprobarContactoEnemigos()
+    {
+        Vector3 miPos = new Vector3(transform.position.x, 0f, transform.position.z);
+
+        foreach (ControladorSlime s in ControladorSlime.slimesActivos)
+        {
+            if (s == null || s.EstaMuerto) continue;
+            if (Vector3.Distance(miPos, VectorXZ(s.transform.position)) < 0.7f)
+            { SaludJugador.Instancia?.RecibirDanio(1); return; }
+        }
+        foreach (ControladorEsqueleto e in ControladorEsqueleto.esqueletosActivos)
+        {
+            if (e == null || e.EstaMuerto) continue;
+            if (Vector3.Distance(miPos, VectorXZ(e.transform.position)) < 0.7f)
+            { SaludJugador.Instancia?.RecibirDanio(1); return; }
+        }
+        foreach (ControladorPanda p in ControladorPanda.pandasActivos)
+        {
+            if (p == null || p.EstaMuerto) continue;
+            if (Vector3.Distance(miPos, VectorXZ(p.transform.position)) < 0.7f)
+            { SaludJugador.Instancia?.RecibirDanio(1); return; }
+        }
+        if (ControladorMetagross.Instancia != null && !ControladorMetagross.Instancia.EstaMuerto)
+        {
+            if (Vector3.Distance(miPos, VectorXZ(ControladorMetagross.Instancia.transform.position)) < 1.5f)
+            { SaludJugador.Instancia?.RecibirDanio(1); return; }
+        }
+    }
+
+    // Elimina el rastro de slime de la casilla pisada
     private void LimpiarCasilla(Vector3 posicion)
     {
-        Collider[] objetosPisados = Physics.OverlapSphere(posicion, 0.1f);
+        Vector3 centroCasilla = new Vector3(Mathf.Round(posicion.x), 0f, Mathf.Round(posicion.z));
+        Collider[] objetosPisados = Physics.OverlapSphere(centroCasilla, 0.4f);
         foreach (Collider obj in objetosPisados)
         {
             Casilla casilla = obj.GetComponentInParent<Casilla>();

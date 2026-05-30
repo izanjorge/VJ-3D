@@ -51,8 +51,17 @@ public class GestorNivel : MonoBehaviour
         jugador    = jugadorObj.transform;
         puerta     = FindFirstObjectByType<Puerta>();
 
-        // Contar todos los Enemigo de la escena
-        enemigosVivos = FindObjectsByType<Enemigo>(FindObjectsSortMode.None).Length;
+        // Contar enemigos desde las listas estáticas de cada controlador.
+        // OnEnable() de cada controlador se ejecuta antes que cualquier Start(),
+        // por lo que las listas ya están completas cuando LevelGenerator llama a Iniciar().
+        enemigosVivos = ControladorSlime.slimesActivos.Count
+                      + ControladorEsqueleto.esqueletosActivos.Count
+                      + ControladorPanda.pandasActivos.Count
+                      + (ControladorMetagross.Instancia != null ? 1 : 0);
+
+        // Nota: Metagross (Nivel9) carga los Créditos directamente al morir,
+        // por lo que su muerte NO pasa por NotificarMuerteEnemigo.
+        // En Nivel9, la puerta se abre igualmente cuando los demás enemigos mueran.
 
         // Si no hay enemigos, la puerta se abre de inmediato
         if (enemigosVivos == 0)
