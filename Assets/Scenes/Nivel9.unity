@@ -1,4 +1,4 @@
-﻿%YAML 1.1
+%YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
 --- !u!29 &1
 OcclusionCullingSettings:
@@ -239,6 +239,22 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4469380500208768558, guid: dd443e50265af884dad573195428fc0f, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4469380500208768558, guid: dd443e50265af884dad573195428fc0f, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4469380500208768558, guid: dd443e50265af884dad573195428fc0f, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4469380500208768558, guid: dd443e50265af884dad573195428fc0f, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5125552085765682747, guid: dd443e50265af884dad573195428fc0f, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -258,6 +274,22 @@ PrefabInstance:
     - target: {fileID: 6583344692085289901, guid: dd443e50265af884dad573195428fc0f, type: 3}
       propertyPath: m_Name
       value: UIJuego
+      objectReference: {fileID: 0}
+    - target: {fileID: 7809643409034839269, guid: dd443e50265af884dad573195428fc0f, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7809643409034839269, guid: dd443e50265af884dad573195428fc0f, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7809643409034839269, guid: dd443e50265af884dad573195428fc0f, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7809643409034839269, guid: dd443e50265af884dad573195428fc0f, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -869,11 +901,58 @@ PrefabInstance:
       propertyPath: m_LocalRotation.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1151388028547126963, guid: 974b3824551457546a14af1508ccb37f, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1151388028547126963, guid: 974b3824551457546a14af1508ccb37f, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1151388028547126963, guid: 974b3824551457546a14af1508ccb37f, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 1151388028547126963, guid: 974b3824551457546a14af1508ccb37f, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1151388028547126963, guid: 974b3824551457546a14af1508ccb37f, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.4
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 8164078558771037576, guid: 974b3824551457546a14af1508ccb37f, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8100000000000093}
   m_SourcePrefab: {fileID: 100100000, guid: 974b3824551457546a14af1508ccb37f, type: 3}
+--- !u!1 &8100000000000092 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8164078558771037576, guid: 974b3824551457546a14af1508ccb37f, type: 3}
+  m_PrefabInstance: {fileID: 8100000000000091}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &8100000000000093
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8100000000000092}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6ba3c9aca9ed6ce4f940a97c23635d24, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ControladorMetagross
+  vidasMax: 10
+  velocidadSalto: 3.5
+  alturaSalto: 5
+  duracionPreparacion: 2
+  pausaEntreAtaques: 1.5
+  proyectilPrefab: {fileID: 1100111222333444001, guid: a3f7c2e1d4b5961f8a2e3c7d5b4f1a90, type: 3}
+  velocidadCuchillo: 7
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

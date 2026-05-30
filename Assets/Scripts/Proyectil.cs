@@ -52,6 +52,14 @@ public class Proyectil : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        // Los proyectiles atraviesan a los propios enemigos (no deben destruirse
+        // al rozar el collider del slime, esqueleto, panda o metagross que los lanzó).
+        if (other.GetComponentInParent<ControladorSlime>()     != null ||
+            other.GetComponentInParent<ControladorEsqueleto>() != null ||
+            other.GetComponentInParent<ControladorPanda>()     != null ||
+            other.GetComponentInParent<ControladorMetagross>() != null)
+            return;
+
         // Dañar al jugador y destruirse
         if (other.CompareTag("Jugador"))
         {

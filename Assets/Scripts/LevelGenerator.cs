@@ -230,26 +230,27 @@ public class LevelGenerator : MonoBehaviour
         },
 
         // ── NIVEL 9 (18 filas) · "Arena del Jefe Final" ──────── Morado
-        // Sin caída. Las 7 columnas completamente libres para maximizar el espacio de juego.
+        // Arena completamente despejada para la batalla contra Metagross.
+        // Sin obstáculos: Metagross puede saltar y aterrizar libremente en cualquier casilla.
         // Monedas en los extremos incentivan al jugador a moverse por todo el ancho.
         new string[] {
-            ".......",  // f=0
-            ".J...J.",  // f=1  jarrones c=1,c=5 (decorativos)
-            ".$...$.",  // f=2  monedas en los extremos (incentiva usar el ancho)
+            ".......",  // f=0   jugador (c=3)
+            ".......",  // f=1
+            ".$...$.",  // f=2   monedas en extremos
             ".......",  // f=3
-            "..P.P..",  // f=4  pinchos ornamentales
+            ".......",  // f=4
             ".......",  // f=5
-            ".......",  // f=6  zona boss: área despejada 7×6 (f=6-11)
-            ".......",  // f=7
+            ".......",  // f=6
+            ".......",  // f=7   ZONA BOSS: arena completamente abierta
             ".......",  // f=8
             ".......",  // f=9
             ".......",  // f=10
-            "...L...",  // f=11 lápida central (peligro zona de paso)
-            ".C...C.",  // f=12 cajas c=1,c=5 (pueden usarse como escudo)
-            "V.....V",  // f=13 vallas flancos (crean sección visual sin cerrar el ancho)
-            "..P.P..",  // f=14 pinchos
-            ".$...$.",  // f=15 monedas difíciles en los extremos
-            ".C...C.",  // f=16 cajas c=1,c=5
+            ".......",  // f=11
+            ".......",  // f=12
+            ".......",  // f=13
+            ".......",  // f=14
+            ".$...$.",  // f=15  monedas en extremos
+            ".......",  // f=16
             ".......",  // f=17
         },
     };
