@@ -41,6 +41,9 @@ public class LevelGenerator : MonoBehaviour
     [Header("Sistema de Caída del Suelo")]
     public GestorCaidaSuelo gestorCaida;
 
+    [Header("Puerta de Salida")]
+    public GameObject puertaPrefab;   // Prefab Puerta (cubo visual, script Puerta)
+
     const int COLUMNAS    = 7;
     const int OFFSET_COL  = 3; // COLUMNAS / 2
     const float ALTURA_MUROS = 1.0f;
@@ -264,10 +267,26 @@ public class LevelGenerator : MonoBehaviour
 
         GenerarMapa(filas);
         GenerarParedesL(filas);
+        SpawnearPuerta(filas);
 
         // Activar caída del suelo en niveles 3-8 (no en tutorial ni en boss)
         if (nivelActual >= 3 && nivelActual <= 8 && gestorCaida != null)
             gestorCaida.Iniciar(objetosPorFila, filas, player, nivelActual);
+
+        // Inicializar gestor de nivel (enemigos + salida) en TODOS los niveles
+        GestorNivel gestor = GetComponent<GestorNivel>();
+        if (gestor != null) gestor.Iniciar(filas, player);
+    }
+
+    // ── PUERTA DE SALIDA ────────────────────────────────────────────────────
+    void SpawnearPuerta(int filas)
+    {
+        if (puertaPrefab == null) return;
+        // La puerta ocupa el ÚLTIMO TILE (z = filas-1), bloqueando el paso.
+        // Y = 1 → la base queda a ras del suelo (el cubo tiene altura 2, centrado en Y=1).
+        // Su BoxCollider en layer Obstaculos impide avanzar hasta que se abra.
+        Vector3 pos = new Vector3(0f, 1f, filas - 1);
+        Instantiate(puertaPrefab, pos, puertaPrefab.transform.rotation, transform);
     }
 
     // ── GENERACIÓN DEL MAPA ─────────────────────────────────────────────

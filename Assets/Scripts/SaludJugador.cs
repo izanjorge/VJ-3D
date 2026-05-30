@@ -138,10 +138,18 @@ public class SaludJugador : MonoBehaviour
             tiempoRestante -= intervaloRapido;
         }
 
-        // Resetear vidas y volver al nivel 1 (build index 0)
+        // Resetear vidas y monedas antes de volver al MainMenu
         VidasActuales = vidasMax;
         OnVidaCambiada?.Invoke(VidasActuales, vidasMax);
-        SceneManager.LoadScene(0);
+
+        ControladorJugador ctrl = GetComponent<ControladorJugador>();
+        if (ctrl != null)
+        {
+            ctrl.numMonedas = 0;
+            ctrl.OnMonedasCambiadas?.Invoke(0);
+        }
+
+        SceneManager.LoadScene(0); // MainMenu
     }
 
     void ActualizarUI()
