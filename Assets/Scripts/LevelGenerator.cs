@@ -282,10 +282,11 @@ public class LevelGenerator : MonoBehaviour
     void SpawnearPuerta(int filas)
     {
         if (puertaPrefab == null) return;
-        // La puerta ocupa el ÚLTIMO TILE (z = filas-1), bloqueando el paso.
-        // Y = 1 → la base queda a ras del suelo (el cubo tiene altura 2, centrado en Y=1).
-        // Su BoxCollider en layer Obstaculos impide avanzar hasta que se abra.
-        Vector3 pos = new Vector3(0f, 1f, filas - 1);
+        // La puerta se incrusta en la pared del fondo (z = filas - 0.5, igual que GenerarParedesL).
+        // Y = 1 → base a ras del suelo para un cubo de altura 2.
+        // No necesita BoxCollider: el jugador no puede caminar hasta allí de todos modos.
+        // El paso al siguiente nivel se activa desde ControladorJugador al pulsar adelante.
+        Vector3 pos = new Vector3(0f, 1.5f, filas - 0.5f);
         Instantiate(puertaPrefab, pos, puertaPrefab.transform.rotation, transform);
     }
 

@@ -59,16 +59,8 @@ public class GestorNivel : MonoBehaviour
             AbrirPuerta();
     }
 
-    // ── Update: comprueba si el jugador ha llegado a la salida ──────────────
-    void Update()
-    {
-        if (!PuedeAvanzar || jugador == null || avanzando) return;
-
-        // La puerta bloquea z=filas-1 mientras está cerrada.
-        // En cuanto se abre y el jugador pisa ese tile, avanzamos al siguiente nivel.
-        if (Mathf.RoundToInt(jugador.position.z) >= TotalFilas - 1)
-            SiguienteNivel();
-    }
+    // El avance al siguiente nivel lo inicia ControladorJugador cuando el jugador
+    // pulsa adelante desde el tile de la puerta (destino sin suelo + PuedeAvanzar).
 
     // ── API pública ──────────────────────────────────────────────────────────
 
@@ -96,11 +88,7 @@ public class GestorNivel : MonoBehaviour
     {
         PuedeAvanzar = true;
         puerta?.Abrir();
-
-        // Si el jugador ya está en la última fila cuando se abre la puerta,
-        // avanzamos automáticamente (para que no quede "atascado" esperando).
-        if (jugador != null && Mathf.RoundToInt(jugador.position.z) >= TotalFilas - 1)
-            SiguienteNivel();
+        // El jugador debe caminar hasta la puerta y pulsar adelante para avanzar.
     }
 
     IEnumerator CargarSiguienteNivel()
