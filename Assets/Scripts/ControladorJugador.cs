@@ -203,6 +203,7 @@ public class ControladorJugador : MonoBehaviour
         Vector3 posicionInicial = transform.position;
         Vector3 posicionDestino = posicionInicial + (direccion * distanciaPaso);
 
+        LimpiarCasilla(posicionInicial);
         transform.forward = direccion;
 
         float tiempoTranscurrido = 0;
@@ -219,18 +220,34 @@ public class ControladorJugador : MonoBehaviour
         }
 
         transform.position = posicionDestino;
+        LimpiarCasilla(posicionDestino);
         estaMoviendose = false;
+    }
+
+    // Elimina el rastro de slime de la casilla pisada (integrado desde feature/slime)
+    private void LimpiarCasilla(Vector3 posicion)
+    {
+        Collider[] objetosPisados = Physics.OverlapSphere(posicion, 0.1f);
+        foreach (Collider obj in objetosPisados)
+        {
+            Casilla casilla = obj.GetComponentInParent<Casilla>();
+            if (casilla != null)
+                casilla.LimpiarSlime();
+        }
     }
 
     void ManejarCambioEscenas()
     {
+        // Build Settings: 0=MainMenu, 1=Creditos, 2=Nivel0 ... 11=Nivel9
+        // Tecla 0 -> Nivel0 (indice 2), Tecla 9 -> Nivel9 (indice 11)
         for (int i = 0; i <= 9; i++)
         {
             if (Input.GetKeyDown(i.ToString()))
             {
-                if (i < SceneManager.sceneCountInBuildSettings)
+                int indiceEscena = i + 2;
+                if (indiceEscena < SceneManager.sceneCountInBuildSettings)
                 {
-                    SceneManager.LoadScene(i);
+                    SceneManager.LoadScene(indiceEscena);
                 }
             }
         }

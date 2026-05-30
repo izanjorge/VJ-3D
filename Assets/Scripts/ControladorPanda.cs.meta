@@ -1,0 +1,13 @@
+fileFormatVersion: 2
+guid: 163e7ed61bede4c4ab60061fb0259a18
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - cuchilloPrefab: {fileID: 1288864684739454419, guid: 43a58f7ab7fc2f74899bf623b2871dd8, type: 3}
+  - puntoDeDisparo: {instanceID: 0}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
