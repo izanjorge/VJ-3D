@@ -185,6 +185,7 @@ public class ControladorMetagross : MonoBehaviour
     IEnumerator EntradaDesdeCielo()
     {
         estaSaltando = true;
+        AudioManager.Instancia?.PlaySFX(AudioManager.Instancia.sfxMetaEntrada);
 
         const float ALTURA_INICIO = 14f;
         Vector3 posFinal  = new Vector3(transform.position.x, groundY, transform.position.z);
@@ -212,6 +213,8 @@ public class ControladorMetagross : MonoBehaviour
     // ── Fase 1: preparación (2 s) — bloquea objetivo desde el PRIMER FOTOGRAMA ─
     IEnumerator FasePreparacion()
     {
+        AudioManager.Instancia?.PlaySFX(AudioManager.Instancia.sfxMetaCargando);
+
         // Bloquear la posición del jugador AL INICIO, usando siempre groundY como Y de aterrizaje.
         // Esto garantiza que Metagross siempre aterriza a la misma altura que el jugador.
         if (jugadorCache != null)
@@ -297,6 +300,8 @@ public class ControladorMetagross : MonoBehaviour
     // ── Animación de aterrizaje (squash & stretch) ────────────────────────────
     IEnumerator AnimacionAterrizaje()
     {
+        AudioManager.Instancia?.PlaySFX(AudioManager.Instancia.sfxMetaAterrizaje);
+
         Vector3 escalaSquash = new Vector3(escalaOriginal.x * 1.5f, escalaOriginal.y * 0.45f, escalaOriginal.z * 1.5f);
         float t = 0f;
         while (t < 0.1f)
@@ -319,6 +324,7 @@ public class ControladorMetagross : MonoBehaviour
     void LanzarCuchillosEnCruz()
     {
         if (proyectilPrefab == null) return;
+        AudioManager.Instancia?.PlaySFX(AudioManager.Instancia.sfxCuchillo);
         Vector3 origen = transform.position + Vector3.up * 1f;
         foreach (Vector3 dir in DIRS)
         {
@@ -385,6 +391,7 @@ public class ControladorMetagross : MonoBehaviour
 
         // En tierra: sacudida de posición usando posicionSuelo como referencia fija.
         // Siempre restauramos exactamente a posicionSuelo para no acumular deriva.
+        AudioManager.Instancia?.PlaySFX(AudioManager.Instancia.sfxMetaDanio);
         Vector3 refBase = posicionSuelo;
         float tt = 0f;
         while (tt < 0.3f)
@@ -404,6 +411,8 @@ public class ControladorMetagross : MonoBehaviour
 
     IEnumerator AnimacionMuerteEpica()
     {
+        AudioManager.Instancia?.PlaySFX(AudioManager.Instancia.sfxMetaMuerteExplosion);
+
         // Ocultar barra de vida
         if (barraVidaParent != null) barraVidaParent.SetActive(false);
 

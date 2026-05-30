@@ -157,6 +157,7 @@ public class ControladorSlime : MonoBehaviour
         }
 
         transform.position = posicionDestino;
+        AudioManager.Instancia?.PlaySFX(AudioManager.Instancia.sfxSlimePaso);
         MancharCasilla(posicionDestino); // Deja rastro en la casilla de llegada
 
         yield return StartCoroutine(ReboteAterrizaje());
@@ -237,6 +238,8 @@ public class ControladorSlime : MonoBehaviour
 
     IEnumerator AnimacionMuerte()
     {
+        AudioManager.Instancia?.PlaySFX(AudioManager.Instancia.sfxMuerteGenerica);
+
         // Paso 1: pequeño flash de expansión
         float tiempoExpansion = 0.12f;
         float tiempo = 0f;

@@ -90,9 +90,11 @@ public class ControladorJugador : MonoBehaviour
 
     IEnumerator AnimacionAtaque()
     {
-        estaMoviendose = true; 
+        estaMoviendose = true;
         estaAtacando = true; // Entramos en estado "Ataque", por lo que seremos sordos a las monedas
-        
+
+        AudioManager.Instancia?.PlaySFX(AudioManager.Instancia.sfxJugadorAtaque);
+
         Vector3 posicionInicial = transform.position;
         Vector3 posicionPico = posicionInicial + (transform.forward * (distanciaPaso * 0.6f)); 
         
@@ -146,6 +148,7 @@ public class ControladorJugador : MonoBehaviour
 
             if (jarron != null)
             {
+                AudioManager.Instancia?.PlaySFX(AudioManager.Instancia.sfxJugadorImpacto);
                 jarron.Romper();
                 break;
             }
@@ -159,7 +162,7 @@ public class ControladorJugador : MonoBehaviour
             if (slime == null || slime.EstaMuerto) continue;
             Vector3 h = VectorXZ(slime.transform.position - transform.position);
             if (h.magnitude < 1.5f && Vector3.Dot(h.normalized, dirAtaque) > 0.5f)
-            { slime.RecibirGolpe(); return; }
+            { AudioManager.Instancia?.PlaySFX(AudioManager.Instancia.sfxJugadorImpacto); slime.RecibirGolpe(); return; }
         }
 
         // ── Esqueletos ─────────────────────────────────────────────────────
@@ -168,7 +171,7 @@ public class ControladorJugador : MonoBehaviour
             if (esq == null || esq.EstaMuerto) continue;
             Vector3 h = VectorXZ(esq.transform.position - transform.position);
             if (h.magnitude < 1.5f && Vector3.Dot(h.normalized, dirAtaque) > 0.5f)
-            { esq.RecibirGolpe(); return; }
+            { AudioManager.Instancia?.PlaySFX(AudioManager.Instancia.sfxJugadorImpacto); esq.RecibirGolpe(); return; }
         }
 
         // ── Pandas ─────────────────────────────────────────────────────────
@@ -177,7 +180,7 @@ public class ControladorJugador : MonoBehaviour
             if (panda == null || panda.EstaMuerto) continue;
             Vector3 h = VectorXZ(panda.transform.position - transform.position);
             if (h.magnitude < 1.5f && Vector3.Dot(h.normalized, dirAtaque) > 0.5f)
-            { panda.RecibirGolpe(); return; }
+            { AudioManager.Instancia?.PlaySFX(AudioManager.Instancia.sfxJugadorImpacto); panda.RecibirGolpe(); return; }
         }
 
         // ── Metagross (jefe — rango mayor, ángulo más amplio) ──────────────
@@ -185,7 +188,7 @@ public class ControladorJugador : MonoBehaviour
         {
             Vector3 h = VectorXZ(ControladorMetagross.Instancia.transform.position - transform.position);
             if (h.magnitude < 2.5f && Vector3.Dot(h.normalized, dirAtaque) > 0.3f)
-                ControladorMetagross.Instancia.RecibirGolpe();
+            { AudioManager.Instancia?.PlaySFX(AudioManager.Instancia.sfxJugadorImpacto); ControladorMetagross.Instancia.RecibirGolpe(); }
         }
     }
 
@@ -198,8 +201,9 @@ public class ControladorJugador : MonoBehaviour
         if (other.CompareTag("Moneda") && !estaAtacando)
         {
             // NUEVO: Apagamos el colisionador de la moneda inmediatamente para evitar doble conteo
-            other.enabled = false; 
-            
+            other.enabled = false;
+
+            AudioManager.Instancia?.PlaySFX(AudioManager.Instancia.sfxMoneda, AudioManager.Instancia.volumenMoneda);
             numMonedas++;
             ActualizarMarcador();
             Destroy(other.gameObject);
@@ -248,6 +252,8 @@ public class ControladorJugador : MonoBehaviour
         Vector3 posicionInicial = transform.position;
         Vector3 posicionDestino = posicionInicial + (direccion * distanciaPaso);
 
+        AudioManager.Instancia?.PlaySFX(AudioManager.Instancia.sfxSalto);
+
         LimpiarCasilla(posicionInicial);
         transform.forward = direccion;
 
@@ -265,6 +271,7 @@ public class ControladorJugador : MonoBehaviour
         }
 
         transform.position = posicionDestino;
+        AudioManager.Instancia?.PlaySFX(AudioManager.Instancia.sfxJugadorPaso);
         ComprobarRastroSlime(posicionDestino); // Antes de limpiar para detectar el rastro
         LimpiarCasilla(posicionDestino);
         ComprobarContactoEnemigos();
@@ -299,6 +306,7 @@ public class ControladorJugador : MonoBehaviour
     IEnumerator CorutinRalentizacion(float duracion)
     {
         velocidad = velocidadNormal * 0.5f;
+        AudioManager.Instancia?.PlaySFX(AudioManager.Instancia.sfxJugadorRalentizado);
         yield return new WaitForSeconds(duracion);
         velocidad = velocidadNormal;
         corutinRalentizacion = null;

@@ -39,6 +39,7 @@ public class TrampaDisparador : MonoBehaviour
     void Disparar()
     {
         if (flechaPrefab == null) return;
+        AudioManager.Instancia?.PlaySFX(AudioManager.Instancia.sfxFlechaDisparo);
 
         // TrampaFlechas tiene la cara de disparo en su eje -X local.
         // LevelGenerator: col0→Y+180, col6→Y+0. Con Y+180, -right = +X mundo (hacia centro).

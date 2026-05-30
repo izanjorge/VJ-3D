@@ -134,6 +134,7 @@ public class ControladorEsqueleto : MonoBehaviour
         transform.rotation      = Quaternion.LookRotation(dir);
         estaMoviendose          = false;
 
+        AudioManager.Instancia?.PlaySFX(AudioManager.Instancia.sfxEsqueletoPaso);
         ComprobarContactoJugador();
     }
 
@@ -141,6 +142,7 @@ public class ControladorEsqueleto : MonoBehaviour
     IEnumerator AtaqueAgresivo()
     {
         estaAtacando = true;
+        AudioManager.Instancia?.PlaySFX(AudioManager.Instancia.sfxEsqueletoAtaque);
 
         // Girar hacia el jugador
         if (jugadorCache != null)
@@ -240,6 +242,8 @@ public class ControladorEsqueleto : MonoBehaviour
 
     IEnumerator AnimacionMuerte()
     {
+        AudioManager.Instancia?.PlaySFX(AudioManager.Instancia.sfxEsqueletoMuerte);
+
         // Flash de expansión
         Vector3 escalaBase = transform.localScale;
         float t = 0f;

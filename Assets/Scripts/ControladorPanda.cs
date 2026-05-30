@@ -155,6 +155,7 @@ public class ControladorPanda : MonoBehaviour
     void LanzarCuchillosEnCruz()
     {
         if (proyectilPrefab == null) return;
+        AudioManager.Instancia?.PlaySFX(AudioManager.Instancia.sfxCuchillo);
 
         Vector3 origen = transform.position + Vector3.up * 1f;
         foreach (Vector3 dir in DIRS)
@@ -209,6 +210,8 @@ public class ControladorPanda : MonoBehaviour
 
     IEnumerator AnimacionMuerte()
     {
+        AudioManager.Instancia?.PlaySFX(AudioManager.Instancia.sfxPandaMuerte);
+
         Vector3 posIni    = transform.position;
         Vector3 escalaIni = transform.localScale;
         float t = 0f, dur = 0.6f;

@@ -56,6 +56,7 @@ public class CajaEmpujable : MonoBehaviour
         // La caja no puede incrustarse en una pared ni en otra caja
         if (HayObstaculoEnDestino(destino)) return false;
 
+        AudioManager.Instancia?.PlaySFX(AudioManager.Instancia.sfxCajaEmpujar);
         StartCoroutine(DeslizarHacia(destino, duracion));
         return true;
     }
@@ -80,6 +81,7 @@ public class CajaEmpujable : MonoBehaviour
 
         // Snap exacto a la casilla de destino
         transform.position = destino;
+        AudioManager.Instancia?.PlaySFX(AudioManager.Instancia.sfxCajaGolpe);
         estaMoviendose = false;
 
         // ── Actualizar fila en el sistema de caída del suelo ────────────────

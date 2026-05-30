@@ -59,6 +59,8 @@ public class TrampaPinchos : MonoBehaviour
 
     IEnumerator Subir()
     {
+        AudioManager.Instancia?.PlaySFX(AudioManager.Instancia.sfxPinchos);
+
         // Animamos la subida SIN activar daño (los pinchos aún no son visibles)
         float tiempo = 0f;
         while (tiempo < duracionSubida)

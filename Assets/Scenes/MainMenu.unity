@@ -1709,6 +1709,85 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MenuPrincipal
+--- !u!1 &1476524162
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1476524164}
+  - component: {fileID: 1476524163}
+  m_Layer: 0
+  m_Name: AudioManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1476524163
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1476524162}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 10c50579216850f4d822b56b98b14b56, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AudioManager
+  musicaMenu: {fileID: 8300000, guid: 70ac0cbf7d717a34c8fa0970b5797b5f, type: 3}
+  musicaNiveles: {fileID: 8300000, guid: a0435d420b3082e418880950c62f1509, type: 3}
+  musicaPeligro: {fileID: 8300000, guid: e67eabeefef36cc47a75af0f4c3acc20, type: 3}
+  musicaBoss: {fileID: 8300000, guid: dbf58e1cfe3a47d47b711b306295967b, type: 3}
+  musicaCreditos: {fileID: 8300000, guid: b4126bcd1d04e9b40ad0d0f95a8ae1c0, type: 3}
+  sfxJugadorPaso: {fileID: 8300000, guid: 4d0fbf83955e0c54daa4cacaf33d0934, type: 3}
+  sfxSalto: {fileID: 8300000, guid: aad764e98302718409099d90023e7fea, type: 3}
+  sfxJugadorAtaque: {fileID: 8300000, guid: 919a4d5c8024bda43b6f7b20d0af0171, type: 3}
+  sfxJugadorImpacto: {fileID: 8300000, guid: 9547f7db38a548f4a9dbbea2d3f76396, type: 3}
+  sfxJugadorDanio: {fileID: 8300000, guid: 7ae41466862653d40afce90de5917494, type: 3}
+  sfxJugadorMuerte: {fileID: 8300000, guid: 5fd656e6a83226f479cdb121db256f63, type: 3}
+  sfxJugadorRalentizado: {fileID: 8300000, guid: 23821b1a287ca1047b0ef70b6a0db435, type: 3}
+  sfxMoneda: {fileID: 8300000, guid: 6ff8c49ce1a576e4bbf672356ad49520, type: 3}
+  sfxSlimePaso: {fileID: 8300000, guid: 29cc7e64a111a34469fdb4b49150db94, type: 3}
+  sfxMuerteGenerica: {fileID: 8300000, guid: 5f455c386833b3543b69709e9e5efece, type: 3}
+  sfxEsqueletoPaso: {fileID: 8300000, guid: 7aae9deaa66f46345b61599da808c2c0, type: 3}
+  sfxEsqueletoAtaque: {fileID: 8300000, guid: f101607cfc5c50b48b98e9e4a1e8ea57, type: 3}
+  sfxEsqueletoMuerte: {fileID: 8300000, guid: 394fd085e6bf8ba4f80b45d19b688e55, type: 3}
+  sfxCuchillo: {fileID: 8300000, guid: 8228aa9fdc54cd94cbf312938fe13220, type: 3}
+  sfxPandaMuerte: {fileID: 8300000, guid: e37c3c296c7acc947a3138e46d475f95, type: 3}
+  sfxMetaEntrada: {fileID: 8300000, guid: 72a4ace3d0d9ca64997e937c68726a66, type: 3}
+  sfxMetaAterrizaje: {fileID: 8300000, guid: 0f4626e4fca2d9f47b1078c5534af527, type: 3}
+  sfxMetaCargando: {fileID: 8300000, guid: 54f33ba4e9c62624fa177b31f4dba2e3, type: 3}
+  sfxMetaDanio: {fileID: 8300000, guid: 61eb28fac01f6ac448af1b612b912d91, type: 3}
+  sfxMetaMuerteExplosion: {fileID: 8300000, guid: f567bde1860e82447879cb138ae39ab4, type: 3}
+  sfxFlechaDisparo: {fileID: 8300000, guid: 1a9fbdb3237e7a94cb6f1b7c26417bbf, type: 3}
+  sfxPinchos: {fileID: 8300000, guid: 3dfa845448f5550479e4d5b41b1174f1, type: 3}
+  sfxJarronRomper: {fileID: 8300000, guid: ca8c365ab27e9d4469b71a78c454cf72, type: 3}
+  sfxCajaEmpujar: {fileID: 8300000, guid: 304a567a3b97b7d43ab91b6ab4c30438, type: 3}
+  sfxCajaGolpe: {fileID: 8300000, guid: ca8c365ab27e9d4469b71a78c454cf72, type: 3}
+  sfxPuerta: {fileID: 8300000, guid: 3b561a9b56377954d8b19388e82ff459, type: 3}
+  sfxSueloAdvertencia: {fileID: 8300000, guid: e16ef50b68f0b544e86f52c97b195ac8, type: 3}
+  sfxSueloCaida: {fileID: 8300000, guid: a27667b6c2e0e4d49b31c0e2af97f081, type: 3}
+  volumenMusica: 0.45
+  volumenSFX: 1
+--- !u!4 &1476524164
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1476524162}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.32074, y: -0, z: 12.34073}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -1717,3 +1796,4 @@ SceneRoots:
   - {fileID: 301}
   - {fileID: 1001}
   - {fileID: 3001}
+  - {fileID: 1476524164}

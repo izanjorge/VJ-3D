@@ -104,6 +104,7 @@ public class GestorCaidaSuelo : MonoBehaviour
             posOrig[i] = objetos[i] != null ? objetos[i].transform.position : Vector3.zero;
 
         // ── FASE 1: Advertencia — bloques tiemblan + cámara sacude sin parar ──
+        AudioManager.Instancia?.PlaySFX(AudioManager.Instancia.sfxSueloAdvertencia);
         float t = 0f;
         float timerImpulso = 0f;
         while (t < duracionAdvertencia)
@@ -135,6 +136,7 @@ public class GestorCaidaSuelo : MonoBehaviour
         VerificarJugadorEnFila(indiceFila);
 
         // ── FASE 2: Caída con sacudida decreciente ──────────────────────────
+        AudioManager.Instancia?.PlaySFX(AudioManager.Instancia.sfxSueloCaida);
         t = 0f;
         timerImpulso = 0f;
         while (t < duracionCaida)

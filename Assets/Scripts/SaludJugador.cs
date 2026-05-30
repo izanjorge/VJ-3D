@@ -91,10 +91,12 @@ public class SaludJugador : MonoBehaviour
 
         if (VidasActuales <= 0)
         {
+            AudioManager.Instancia?.PlaySFX(AudioManager.Instancia.sfxJugadorMuerte);
             StartCoroutine(SecuenciaMuerte());
         }
         else
         {
+            AudioManager.Instancia?.PlaySFX(AudioManager.Instancia.sfxJugadorDanio);
             StartCoroutine(SecuenciaInvulnerabilidad());
         }
     }
