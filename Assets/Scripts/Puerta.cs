@@ -54,6 +54,7 @@ public class Puerta : MonoBehaviour
     {
         if (EstaAbierta) return;
         EstaAbierta = true;
+        AudioManager.Instancia?.PlaySFX(AudioManager.Instancia.sfxPuerta);
         StartCoroutine(SecuenciaApertura());
     }
 
