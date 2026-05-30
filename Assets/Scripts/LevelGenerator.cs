@@ -158,7 +158,7 @@ public class LevelGenerator : MonoBehaviour
             ".......",  // f=8
             "F.V.C.F",  // f=9  flechas + valla c=2 + caja c=4
             "R..$..R",  // f=10 rocas + moneda
-            "...L...",  // f=11 lápida central (sorpresa al final)
+            ".......",  // f=11
         },
 
         // ── NIVEL 6 (14 filas) · "Catacumbas de la Perdición" ── Rojo  ★SUELO CAE★
