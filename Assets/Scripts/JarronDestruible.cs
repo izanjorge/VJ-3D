@@ -11,6 +11,8 @@ public class JarronDestruible : MonoBehaviour
 
     public void Romper()
     {
+        AudioManager.Instancia?.PlaySFX(AudioManager.Instancia.sfxJarronRomper);
+
         Transform raizPrefab = transform;
         while (raizPrefab.parent != null && raizPrefab.parent.GetComponent<LevelGenerator>() == null)
         {

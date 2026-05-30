@@ -3,7 +3,22 @@ guid: 6828c1c3c03c809469872bd7509e4bd6
 ModelImporter:
   serializedVersion: 24200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: textureColeta
+    second: {fileID: 2100000, guid: 04f2fe5df0410d84187add129e893e58, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: textureCuerpo
+    second: {fileID: 2100000, guid: 228cce51eef002d48ae98470336ca7a3, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: textureEspada
+    second: {fileID: 2100000, guid: 8dceba914bc0105428ed359eea99e660, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0

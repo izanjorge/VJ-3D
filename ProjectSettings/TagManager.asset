@@ -9,6 +9,8 @@ TagManager:
   - Wall
   - Box
   - Obstaculo
+  - Jugador
+  - Valla
   layers:
   - Default
   - TransparentFX
