@@ -728,6 +728,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 7054897929111532772, guid: 409ebd6f2761cec42a82459b08947d6a, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1798140726}
+    - targetCorrespondingSourceObject: {fileID: 7054897929111532772, guid: 409ebd6f2761cec42a82459b08947d6a, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1798140727}
   m_SourcePrefab: {fileID: 100100000, guid: 409ebd6f2761cec42a82459b08947d6a, type: 3}
 --- !u!1 &1798140725 stripped
 GameObject:
@@ -787,6 +790,18 @@ MonoBehaviour:
     DissipationDistance: 100
     PropagationSpeed: 343
   DefaultVelocity: {x: 0, y: -1, z: 0}
+--- !u!114 &1798140727
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1798140725}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 037e9e4797a2ef34d9a75d33abdbc682, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GestorNivel
 --- !u!1001 &1941969794
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -910,7 +925,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 0e37e91af57046346970dbabfa8be846, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 0e37e91af57046346970dbabfa8be846, type: 3}
       propertyPath: m_LocalRotation.x
@@ -918,11 +933,23 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 0e37e91af57046346970dbabfa8be846, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 0e37e91af57046346970dbabfa8be846, type: 3}
       propertyPath: m_LocalRotation.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 100531334050367319, guid: 0e37e91af57046346970dbabfa8be846, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 0e37e91af57046346970dbabfa8be846, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 1255859309423591930, guid: 0e37e91af57046346970dbabfa8be846, type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -930,7 +957,7 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 0e37e91af57046346970dbabfa8be846, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 8100000000000056}
+      addedObject: {fileID: 8100000000000054}
   m_SourcePrefab: {fileID: 100100000, guid: 0e37e91af57046346970dbabfa8be846, type: 3}
 --- !u!1001 &8100000000000052
 PrefabInstance:
@@ -982,15 +1009,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8349320263958670630, guid: f441f9cd4f45694488eff07033a80222, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
-      value: 
+      value:
       objectReference: {fileID: 2100000, guid: d6fc8e220658fc446af34657d0344a77, type: 2}
     - target: {fileID: -1350303562450235367, guid: f441f9cd4f45694488eff07033a80222, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
-      value: 
+      value:
       objectReference: {fileID: 2100000, guid: 7ce53c28a1ecbcf42aa68eb66541cb5d, type: 2}
     - target: {fileID: 9100709286407700023, guid: f441f9cd4f45694488eff07033a80222, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
-      value: 
+      value:
       objectReference: {fileID: 2100000, guid: 2b9bcff83360fae4385aef4e334eb4d4, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -998,19 +1025,14 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: f441f9cd4f45694488eff07033a80222, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 8100000000000055}
+      addedObject: {fileID: 8100000000000056}
   m_SourcePrefab: {fileID: 100100000, guid: f441f9cd4f45694488eff07033a80222, type: 3}
 --- !u!1 &8100000000000053 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: f441f9cd4f45694488eff07033a80222, type: 3}
-  m_PrefabInstance: {fileID: 8100000000000052}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &8100000000000054 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 0e37e91af57046346970dbabfa8be846, type: 3}
   m_PrefabInstance: {fileID: 8100000000000051}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &8100000000000055
+--- !u!114 &8100000000000054
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1019,32 +1041,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 8100000000000053}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 163e7ed61bede4c4ab60061fb0259a18, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ControladorPanda
-  velocidad: 1.5
-  distanciaPaso: 1
-  alturaSalto: 0.4
-  tiempoEntreMovimientos: 2.5
-  proyectilPrefab: {fileID: 1100111222333444001, guid: a3f7c2e1d4b5961f8a2e3c7d5b4f1a90, type: 3}
-  velocidadCuchillo: 6
-  capaSuelo:
-    serializedVersion: 2
-    m_Bits: 64
-  capaObstaculos:
-    serializedVersion: 2
-    m_Bits: 128
---- !u!114 &8100000000000056
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8100000000000054}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e0fb90699f30f214c8c4c7e8e0a3aa00, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Assembly-CSharp::ControladorSlime
   velocidad: 3
   distanciaPaso: 1
@@ -1052,6 +1050,35 @@ MonoBehaviour:
   tiempoEntreMovimientos: 0.5
   estiramientoMaximo: 1.3
   aplastamientoMaximo: 0.7
+  capaSuelo:
+    serializedVersion: 2
+    m_Bits: 64
+  capaObstaculos:
+    serializedVersion: 2
+    m_Bits: 128
+--- !u!1 &8100000000000055 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: f441f9cd4f45694488eff07033a80222, type: 3}
+  m_PrefabInstance: {fileID: 8100000000000052}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &8100000000000056
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8100000000000055}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 163e7ed61bede4c4ab60061fb0259a18, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Assembly-CSharp::ControladorPanda
+  velocidad: 1.5
+  distanciaPaso: 1
+  alturaSalto: 0.4
+  tiempoEntreMovimientos: 2.5
+  proyectilPrefab: {fileID: 1100111222333444001, guid: a3f7c2e1d4b5961f8a2e3c7d5b4f1a90, type: 3}
+  velocidadCuchillo: 6
   capaSuelo:
     serializedVersion: 2
     m_Bits: 64

@@ -199,11 +199,12 @@ public class ControladorPanda : MonoBehaviour
             SaludJugador.Instancia?.RecibirDanio(1);
     }
 
-    // ── Muerte (desvanecerse: sube flotando y se encoge a cero) ──────────────
+    // ── Muerte: explota en pedazos (igual que el Esqueleto) ──────────────────
     public void RecibirGolpe()
     {
         if (EstaMuerto) return;
         EstaMuerto = true;
+        GestorNivel.Instancia?.NotificarMuerteEnemigo();
         StopAllCoroutines();
         StartCoroutine(AnimacionMuerte());
     }
@@ -212,18 +213,60 @@ public class ControladorPanda : MonoBehaviour
     {
         AudioManager.Instancia?.PlaySFX(AudioManager.Instancia.sfxPandaMuerte);
 
-        Vector3 posIni    = transform.position;
-        Vector3 escalaIni = transform.localScale;
-        float t = 0f, dur = 0.6f;
+        Vector3 escalaBase = transform.localScale;
 
-        while (t < dur)
+        // Flash de expansión
+        float t = 0f;
+        while (t < 0.1f)
         {
             t += Time.deltaTime;
-            float p = Mathf.SmoothStep(0f, 1f, t / dur);
-            transform.localScale = Vector3.Lerp(escalaIni, Vector3.zero, p);
-            transform.position   = posIni + Vector3.up * (p * 0.8f);
+            transform.localScale = Vector3.Lerp(escalaBase, escalaBase * 1.4f, t / 0.1f);
             yield return null;
         }
+
+        // Lanza pedazos y colapsa a cero
+        LanzarPedazos();
+
+        t = 0f;
+        Vector3 escalaGrande = transform.localScale;
+        while (t < 0.2f)
+        {
+            t += Time.deltaTime;
+            transform.localScale = Vector3.Lerp(escalaGrande, Vector3.zero, t / 0.2f);
+            yield return null;
+        }
+
         Destroy(gameObject);
+    }
+
+    void LanzarPedazos()
+    {
+        Renderer rend = GetComponentInChildren<Renderer>();
+        Material mat  = rend != null ? rend.sharedMaterial : null;
+
+        for (int i = 0; i < 10; i++)
+        {
+            // Alterna entre esferas (trozos de cuerpo) y cubos (bambú/ropa)
+            PrimitiveType tipo = (i % 3 == 0) ? PrimitiveType.Cube : PrimitiveType.Sphere;
+            GameObject trozo  = GameObject.CreatePrimitive(tipo);
+            trozo.transform.position = transform.position + Vector3.up * 0.8f;
+
+            float s = Random.Range(0.06f, 0.18f);
+            trozo.transform.localScale = new Vector3(s, s * Random.Range(1f, 2f), s);
+            if (mat != null) trozo.GetComponent<Renderer>().sharedMaterial = mat;
+
+            Rigidbody rb = trozo.AddComponent<Rigidbody>();
+            Vector3 dir  = new Vector3(
+                Random.Range(-1f, 1f),
+                Random.Range(0.5f, 2f),
+                Random.Range(-1f, 1f)).normalized;
+            rb.AddForce(dir * Random.Range(4f, 9f), ForceMode.VelocityChange);
+            rb.AddTorque(Random.insideUnitSphere * 15f, ForceMode.VelocityChange);
+
+            Collider col = trozo.GetComponent<Collider>();
+            if (col != null) col.enabled = false;
+
+            Destroy(trozo, 1.5f);
+        }
     }
 }

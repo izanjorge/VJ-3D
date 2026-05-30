@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 using UnityEngine.SceneManagement;
 
@@ -6,7 +7,7 @@ using UnityEngine.SceneManagement;
 /// Jefe final del juego.
 /// - Aparece cayendo desde el cielo al inicio del nivel.
 /// - IA: Bloquea la posición del jugador → espera 2 s → salta → lanza cuchillos en cruz → repite.
-/// - Barra de vida 3D (verde→rojo) encima de la cabeza.
+/// - Barra de vida UI en la parte superior de la pantalla (verde→rojo).
 /// - Necesita varios golpes del jugador para morir.
 /// - Al morir: animación épica → carga la escena de Créditos (índice 1).
 /// </summary>
@@ -45,14 +46,12 @@ public class ControladorMetagross : MonoBehaviour
     // Impide que FeedbackGolpe interfiera durante el salto
     private bool estaSaltando = false;
 
-    // ── Barra de vida ─────────────────────────────────────────────────────────
-    private GameObject barraVidaParent;
-    private GameObject barraRelleno;
-    private Material   matRelleno;
+    // ── Barra de vida UI ─────────────────────────────────────────────────────
+    private GameObject barraVidaParent;   // Canvas raíz
+    private Image      imgRelleno;        // Image con fillAmount
 
     static readonly Color COLOR_VERDE = new Color(0.1f, 0.85f, 0.1f);
     static readonly Color COLOR_ROJO  = new Color(0.9f, 0.1f, 0.1f);
-    const float ANCHO_BARRA           = 1.6f;
 
     static readonly Vector3[] DIRS =
         { Vector3.forward, Vector3.back, Vector3.left, Vector3.right };
@@ -66,6 +65,8 @@ public class ControladorMetagross : MonoBehaviour
     void OnDestroy()
     {
         if (Instancia == this) Instancia = null;
+        // Destruir el canvas si el objeto se destruye
+        if (barraVidaParent != null) Destroy(barraVidaParent);
     }
 
     void Start()
@@ -73,11 +74,8 @@ public class ControladorMetagross : MonoBehaviour
         VidasActuales  = vidasMax;
         escalaOriginal = transform.localScale;
 
-        // Guardar la Y de spawn como referencia permanente de "nivel del suelo".
-        // Así todos los aterrizajes posteriores quedan exactamente a la misma altura
-        // que cuando el diseñador colocó a Metagross en el nivel.
-        groundY        = transform.position.y;
-        posicionSuelo  = transform.position;
+        groundY       = transform.position.y;
+        posicionSuelo = transform.position;
 
         jugadorCache = SaludJugador.Instancia != null
             ? SaludJugador.Instancia.GetComponent<ControladorJugador>()
@@ -87,73 +85,62 @@ public class ControladorMetagross : MonoBehaviour
         StartCoroutine(SecuenciaCompleta());
     }
 
-    void Update()
-    {
-        // La barra siempre mira a la cámara (billboard)
-        if (barraVidaParent != null && Camera.main != null)
-            barraVidaParent.transform.rotation = Camera.main.transform.rotation;
-    }
-
     // ═══════════════════════════════════════════════════════════════════════════
-    // BARRA DE VIDA 3D
+    // BARRA DE VIDA UI (ScreenSpace Overlay — parte superior de la pantalla)
     // ═══════════════════════════════════════════════════════════════════════════
 
     void CrearBarraVida()
     {
-        barraVidaParent = new GameObject("BarraVidaParent");
-        barraVidaParent.transform.SetParent(transform);
-        barraVidaParent.transform.localPosition = new Vector3(0f, 2.2f, 0f);
+        // ── Canvas ScreenSpace-Overlay ────────────────────────────────────────
+        barraVidaParent = new GameObject("CanvasVidaMetagross");
+        Canvas canvas = barraVidaParent.AddComponent<Canvas>();
+        canvas.renderMode  = RenderMode.ScreenSpaceOverlay;
+        canvas.sortingOrder = 100;
 
-        // Fondo oscuro
-        GameObject fondo = GameObject.CreatePrimitive(PrimitiveType.Quad);
-        fondo.name = "BarraFondo";
-        fondo.transform.SetParent(barraVidaParent.transform, false);
-        fondo.transform.localScale    = new Vector3(ANCHO_BARRA + 0.1f, 0.28f, 1f);
-        fondo.transform.localPosition = Vector3.zero;
-        fondo.GetComponent<MeshRenderer>().sharedMaterial = CrearMaterial(new Color(0.15f, 0.15f, 0.15f));
-        Destroy(fondo.GetComponent<Collider>());
+        CanvasScaler scaler = barraVidaParent.AddComponent<CanvasScaler>();
+        scaler.uiScaleMode       = CanvasScaler.ScaleMode.ScaleWithScreenSize;
+        scaler.referenceResolution = new Vector2(1920, 1080);
+        scaler.matchWidthOrHeight  = 0.5f;
 
-        // Relleno (cambia de color según la vida)
-        barraRelleno = GameObject.CreatePrimitive(PrimitiveType.Quad);
-        barraRelleno.name = "BarraRelleno";
-        barraRelleno.transform.SetParent(barraVidaParent.transform, false);
-        barraRelleno.transform.localScale    = new Vector3(ANCHO_BARRA, 0.2f, 1f);
-        barraRelleno.transform.localPosition = new Vector3(0f, 0f, -0.01f);
-        matRelleno = CrearMaterial(COLOR_VERDE);
-        barraRelleno.GetComponent<MeshRenderer>().sharedMaterial = matRelleno;
-        Destroy(barraRelleno.GetComponent<Collider>());
+        barraVidaParent.AddComponent<GraphicRaycaster>();
+
+        // ── Fondo (franja oscura semitransparente) ────────────────────────────
+        GameObject fondoGO = new GameObject("BarraFondo");
+        fondoGO.transform.SetParent(barraVidaParent.transform, false);
+        RectTransform fondoRect = fondoGO.AddComponent<RectTransform>();
+        // Ocupa el 80% central de la pantalla, en la franja superior (90-97%)
+        fondoRect.anchorMin = new Vector2(0.10f, 0.90f);
+        fondoRect.anchorMax = new Vector2(0.90f, 0.97f);
+        fondoRect.offsetMin = Vector2.zero;
+        fondoRect.offsetMax = Vector2.zero;
+        Image fondoImg  = fondoGO.AddComponent<Image>();
+        fondoImg.color  = new Color(0.08f, 0.08f, 0.08f, 0.88f);
+
+        // ── Relleno (fill horizontal izquierda→derecha) ───────────────────────
+        GameObject rellenoGO = new GameObject("BarraRelleno");
+        rellenoGO.transform.SetParent(fondoGO.transform, false);
+        RectTransform rellenoRect = rellenoGO.AddComponent<RectTransform>();
+        rellenoRect.anchorMin = Vector2.zero;
+        rellenoRect.anchorMax = Vector2.one;
+        rellenoRect.offsetMin = new Vector2(4f, 4f);
+        rellenoRect.offsetMax = new Vector2(-4f, -4f);
+
+        imgRelleno            = rellenoGO.AddComponent<Image>();
+        imgRelleno.color      = COLOR_VERDE;
+        imgRelleno.type       = Image.Type.Filled;
+        imgRelleno.fillMethod = Image.FillMethod.Horizontal;
+        imgRelleno.fillOrigin = (int)Image.OriginHorizontal.Left;
+        imgRelleno.fillAmount = 1f;
 
         ActualizarBarraVida();
     }
 
-    static Material CrearMaterial(Color color)
-    {
-        Shader sh = Shader.Find("Universal Render Pipeline/Unlit")
-                 ?? Shader.Find("Unlit/Color")
-                 ?? Shader.Find("Standard");
-        Material mat = new Material(sh);
-        mat.color = color;
-        return mat;
-    }
-
     void ActualizarBarraVida()
     {
-        if (barraRelleno == null || matRelleno == null) return;
-
+        if (imgRelleno == null) return;
         float pct = (float)VidasActuales / vidasMax;
-
-        // Escalar en X proporcional a la vida
-        Vector3 escala = barraRelleno.transform.localScale;
-        escala.x = ANCHO_BARRA * pct;
-        barraRelleno.transform.localScale = escala;
-
-        // Alinear a la izquierda: desplazar el pivote central
-        Vector3 pos = barraRelleno.transform.localPosition;
-        pos.x = (ANCHO_BARRA * pct - ANCHO_BARRA) * 0.5f;
-        barraRelleno.transform.localPosition = pos;
-
-        // Color: verde (lleno) → rojo (vacío)
-        matRelleno.color = Color.Lerp(COLOR_ROJO, COLOR_VERDE, pct);
+        imgRelleno.fillAmount = pct;
+        imgRelleno.color      = Color.Lerp(COLOR_ROJO, COLOR_VERDE, pct);
     }
 
     // ═══════════════════════════════════════════════════════════════════════════
@@ -215,8 +202,6 @@ public class ControladorMetagross : MonoBehaviour
     {
         AudioManager.Instancia?.PlaySFX(AudioManager.Instancia.sfxMetaCargando);
 
-        // Bloquear la posición del jugador AL INICIO, usando siempre groundY como Y de aterrizaje.
-        // Esto garantiza que Metagross siempre aterriza a la misma altura que el jugador.
         if (jugadorCache != null)
         {
             posicionObjetivo = new Vector3(
@@ -226,10 +211,10 @@ public class ControladorMetagross : MonoBehaviour
         }
         else
         {
-            posicionObjetivo = posicionSuelo; // Fallback: saltar al mismo sitio
+            posicionObjetivo = posicionSuelo;
         }
 
-        Vector3 posBase = posicionSuelo; // Usar posicionSuelo (no transform.position, que puede haber derivado)
+        Vector3 posBase = posicionSuelo;
         float t = 0f;
 
         while (t < duracionPreparacion)
@@ -237,25 +222,21 @@ public class ControladorMetagross : MonoBehaviour
             t += Time.deltaTime;
             float progreso = t / duracionPreparacion;
 
-            // Girar suavemente hacia el objetivo bloqueado
             Vector3 dir = posicionObjetivo - transform.position;
             dir.y = 0;
             if (dir.sqrMagnitude > 0.01f)
                 transform.forward = Vector3.Slerp(transform.forward, dir.normalized, Time.deltaTime * 4f);
 
-            // Vibración que se intensifica
             float intensidad = progreso * progreso;
             float agitacion  = Mathf.Sin(t * 18f) * 0.07f * intensidad;
             transform.position = posBase + new Vector3(agitacion, 0f, agitacion * 0.6f);
 
-            // Pulsación de escala
             float pulso = 1f + Mathf.Sin(t * 12f) * 0.05f * intensidad;
             transform.localScale = escalaOriginal * pulso;
 
             yield return null;
         }
 
-        // Restaurar exactamente a la posición de suelo
         transform.position   = posBase;
         transform.localScale = escalaOriginal;
     }
@@ -265,8 +246,8 @@ public class ControladorMetagross : MonoBehaviour
     {
         estaSaltando = true;
 
-        Vector3 posInicio = posicionSuelo;                 // Siempre parte del suelo real
-        Vector3 posFin    = posicionObjetivo;              // Siempre aterriza en groundY
+        Vector3 posInicio = posicionSuelo;
+        Vector3 posFin    = posicionObjetivo;
 
         Vector3 dir = posFin - posInicio;
         dir.y = 0;
@@ -283,13 +264,11 @@ public class ControladorMetagross : MonoBehaviour
             t += Time.deltaTime;
             float p     = Mathf.Clamp01(t / duracion);
             Vector3 pos = Vector3.Lerp(posInicio, posFin, p);
-            // Arco: Y base siempre entre groundY (inicio) y groundY (fin), más el arco parabólico
             pos.y = Mathf.Lerp(posInicio.y, posFin.y, p) + Mathf.Sin(p * Mathf.PI) * alturaSalto;
             transform.position = pos;
             yield return null;
         }
 
-        // Snap garantizado: Metagross aterriza EXACTAMENTE en el punto objetivo (groundY)
         transform.position = posFin;
         posicionSuelo      = posFin;
         estaSaltando       = false;
@@ -367,7 +346,6 @@ public class ControladorMetagross : MonoBehaviour
         }
         else
         {
-            // Pequeño temblor de feedback sin interrumpir la IA
             StartCoroutine(FeedbackGolpe());
         }
     }
@@ -376,7 +354,6 @@ public class ControladorMetagross : MonoBehaviour
     {
         if (estaSaltando)
         {
-            // Estamos en el aire: solo feedback visual de escala, sin tocar la posición
             float t = 0f;
             while (t < 0.2f)
             {
@@ -389,8 +366,6 @@ public class ControladorMetagross : MonoBehaviour
             yield break;
         }
 
-        // En tierra: sacudida de posición usando posicionSuelo como referencia fija.
-        // Siempre restauramos exactamente a posicionSuelo para no acumular deriva.
         AudioManager.Instancia?.PlaySFX(AudioManager.Instancia.sfxMetaDanio);
         Vector3 refBase = posicionSuelo;
         float tt = 0f;
@@ -401,7 +376,6 @@ public class ControladorMetagross : MonoBehaviour
             transform.position = refBase + new Vector3(agit, 0f, -agit * 0.5f);
             yield return null;
         }
-        // Restauración exacta: sin deriva acumulada
         transform.position = refBase;
     }
 
@@ -451,7 +425,6 @@ public class ControladorMetagross : MonoBehaviour
             yield return null;
         }
 
-        // Objeto invisible (no destruido aún para que la corrutina siga)
         transform.localScale = Vector3.zero;
 
         // — Pausa dramática —

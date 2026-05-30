@@ -41,6 +41,9 @@ public class LevelGenerator : MonoBehaviour
     [Header("Sistema de Caída del Suelo")]
     public GestorCaidaSuelo gestorCaida;
 
+    [Header("Puerta de Salida")]
+    public GameObject puertaPrefab;   // Prefab Puerta (cubo visual, script Puerta)
+
     const int COLUMNAS    = 7;
     const int OFFSET_COL  = 3; // COLUMNAS / 2
     const float ALTURA_MUROS = 1.0f;
@@ -155,7 +158,7 @@ public class LevelGenerator : MonoBehaviour
             ".......",  // f=8
             "F.V.C.F",  // f=9  flechas + valla c=2 + caja c=4
             "R..$..R",  // f=10 rocas + moneda
-            "...L...",  // f=11 lápida central (sorpresa al final)
+            ".......",  // f=11
         },
 
         // ── NIVEL 6 (14 filas) · "Catacumbas de la Perdición" ── Rojo  ★SUELO CAE★
@@ -265,10 +268,27 @@ public class LevelGenerator : MonoBehaviour
 
         GenerarMapa(filas);
         GenerarParedesL(filas);
+        SpawnearPuerta(filas);
 
         // Activar caída del suelo en niveles 3-8 (no en tutorial ni en boss)
         if (nivelActual >= 3 && nivelActual <= 8 && gestorCaida != null)
             gestorCaida.Iniciar(objetosPorFila, filas, player, nivelActual);
+
+        // Inicializar gestor de nivel (enemigos + salida) en TODOS los niveles
+        GestorNivel gestor = GetComponent<GestorNivel>();
+        if (gestor != null) gestor.Iniciar(filas, player);
+    }
+
+    // ── PUERTA DE SALIDA ────────────────────────────────────────────────────
+    void SpawnearPuerta(int filas)
+    {
+        if (puertaPrefab == null) return;
+        // La puerta se incrusta en la pared del fondo (z = filas - 0.5, igual que GenerarParedesL).
+        // Y = 1 → base a ras del suelo para un cubo de altura 2.
+        // No necesita BoxCollider: el jugador no puede caminar hasta allí de todos modos.
+        // El paso al siguiente nivel se activa desde ControladorJugador al pulsar adelante.
+        Vector3 pos = new Vector3(0f, 1.5f, filas - 0.5f);
+        Instantiate(puertaPrefab, pos, puertaPrefab.transform.rotation, transform);
     }
 
     // ── GENERACIÓN DEL MAPA ─────────────────────────────────────────────

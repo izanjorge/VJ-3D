@@ -232,6 +232,7 @@ public class ControladorSlime : MonoBehaviour
     {
         if (EstaMuerto) return;
         EstaMuerto = true;
+        GestorNivel.Instancia?.NotificarMuerteEnemigo();
         StopAllCoroutines();
         StartCoroutine(AnimacionMuerte());
     }
