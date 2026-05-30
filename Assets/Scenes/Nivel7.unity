@@ -189,6 +189,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 7054897929111532772, guid: 409ebd6f2761cec42a82459b08947d6a, type: 3}
       insertIndex: -1
       addedObject: {fileID: 120939294}
+    - targetCorrespondingSourceObject: {fileID: 7054897929111532772, guid: 409ebd6f2761cec42a82459b08947d6a, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 120939295}
   m_SourcePrefab: {fileID: 100100000, guid: 409ebd6f2761cec42a82459b08947d6a, type: 3}
 --- !u!1 &120939292 stripped
 GameObject:
@@ -301,6 +304,18 @@ MonoBehaviour:
     DissipationDistance: 100
     PropagationSpeed: 343
   DefaultVelocity: {x: 0, y: -1, z: 0}
+--- !u!114 &120939295
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 120939292}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 037e9e4797a2ef34d9a75d33abdbc682, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GestorNivel
 --- !u!1001 &333740473
 PrefabInstance:
   m_ObjectHideFlags: 0

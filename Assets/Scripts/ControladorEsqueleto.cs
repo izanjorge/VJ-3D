@@ -236,6 +236,7 @@ public class ControladorEsqueleto : MonoBehaviour
     {
         if (EstaMuerto) return;
         EstaMuerto = true;
+        GestorNivel.Instancia?.NotificarMuerteEnemigo();
         StopAllCoroutines();
         StartCoroutine(AnimacionMuerte());
     }

@@ -80,8 +80,16 @@ public class ControladorJugador : MonoBehaviour
                     }
                     else
                     {
-                        // Sin suelo al frente: solo giramos (evita caer al vacío)
-                        transform.forward = direccion;
+                        // Sin suelo al frente: comprobar si es la salida del nivel
+                        Vector3 posDestino = transform.position + (direccion * distanciaPaso);
+                        bool esSalida = GestorNivel.Instancia != null
+                                     && GestorNivel.Instancia.PuedeAvanzar
+                                     && Mathf.RoundToInt(posDestino.z) >= GestorNivel.Instancia.TotalFilas;
+
+                        if (esSalida)
+                            GestorNivel.Instancia.SiguienteNivel();
+                        else
+                            transform.forward = direccion; // giro normal (vacío o pared)
                     }
                 }
             }
@@ -143,8 +151,10 @@ public class ControladorJugador : MonoBehaviour
 
         foreach (Collider col in objetosGolpeados)
         {
-            JarronDestruible jarron = col.GetComponentInParent<JarronDestruible>();
-            if (jarron == null) jarron = col.GetComponentInChildren<JarronDestruible>();
+            // 1. Jarrón rompible
+            JarronDestruible jarron = col.GetComponentInParent<JarronDestruible>()
+                                  ?? col.GetComponentInChildren<JarronDestruible>();
+            if (jarron != null) { jarron.Romper(); break; }
 
             if (jarron != null)
             {
