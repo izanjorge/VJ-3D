@@ -65,6 +65,7 @@ MonoBehaviour:
   matMorado: {fileID: 2100000, guid: 79bc4b2131737864b9830b5d7777eb9b, type: 2}
   nivelActual: 0
   gestorCaida: {fileID: 556915001015731872}
+  puertaPrefab: {fileID: 6409467254615879429, guid: 2f0f4d89fc6cc2d4a9f11944d1c44e57, type: 3}
 --- !u!114 &556915001015731872
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -81,3 +82,6 @@ MonoBehaviour:
   intervaloEntreFilas: 1
   duracionAdvertencia: 0.35
   duracionCaida: 0.55
+  impulseSource: {fileID: 0}
+  fuerzaSacudidaMax: 0.4
+  intervalImpulso: 0.07
