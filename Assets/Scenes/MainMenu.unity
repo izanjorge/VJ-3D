@@ -1771,8 +1771,13 @@ MonoBehaviour:
   sfxPuerta: {fileID: 8300000, guid: 3b561a9b56377954d8b19388e82ff459, type: 3}
   sfxSueloAdvertencia: {fileID: 8300000, guid: e16ef50b68f0b544e86f52c97b195ac8, type: 3}
   sfxSueloCaida: {fileID: 8300000, guid: a27667b6c2e0e4d49b31c0e2af97f081, type: 3}
-  volumenMusica: 0.45
-  volumenSFX: 1
+  volumenMusicaMenu: 0.45
+  volumenMusicaNiveles: 0.2
+  volumenMusicaPeligro: 0.2
+  volumenMusicaBoss: 0.2
+  volumenMusicaCreditos: 0.45
+  volumenSFX: 0.7
+  volumenMoneda: 1
 --- !u!4 &1476524164
 Transform:
   m_ObjectHideFlags: 0
