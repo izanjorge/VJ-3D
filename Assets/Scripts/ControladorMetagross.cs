@@ -47,8 +47,9 @@ public class ControladorMetagross : MonoBehaviour
     private bool estaSaltando = false;
 
     // ── Barra de vida UI ─────────────────────────────────────────────────────
-    private GameObject barraVidaParent;   // Canvas raíz
-    private Image      imgRelleno;        // Image con fillAmount
+    private GameObject    barraVidaParent;   // Canvas raíz
+    private Image         imgRelleno;        // Image del relleno
+    private RectTransform rtRelleno;         // RectTransform del relleno (para escalar el ancho)
 
     static readonly Color COLOR_VERDE = new Color(0.1f, 0.85f, 0.1f);
     static readonly Color COLOR_ROJO  = new Color(0.9f, 0.1f, 0.1f);
@@ -108,39 +109,45 @@ public class ControladorMetagross : MonoBehaviour
         GameObject fondoGO = new GameObject("BarraFondo");
         fondoGO.transform.SetParent(barraVidaParent.transform, false);
         RectTransform fondoRect = fondoGO.AddComponent<RectTransform>();
-        // Ocupa el 80% central de la pantalla, en la franja superior (90-97%)
-        fondoRect.anchorMin = new Vector2(0.10f, 0.90f);
-        fondoRect.anchorMax = new Vector2(0.90f, 0.97f);
+        // Barra centrada, ocupa el 40% central (30%→70%), franja muy fina en la parte superior (96-99%)
+        fondoRect.anchorMin = new Vector2(0.30f, 0.955f);
+        fondoRect.anchorMax = new Vector2(0.70f, 0.995f);
         fondoRect.offsetMin = Vector2.zero;
         fondoRect.offsetMax = Vector2.zero;
         Image fondoImg  = fondoGO.AddComponent<Image>();
         fondoImg.color  = new Color(0.08f, 0.08f, 0.08f, 0.88f);
 
-        // ── Relleno (fill horizontal izquierda→derecha) ───────────────────────
+        // ── Relleno (crece/decrece desde la izquierda) ───────────────────────
+        // Se ancla desde el borde izquierdo del fondo; anchorMax.x controla el ancho.
         GameObject rellenoGO = new GameObject("BarraRelleno");
         rellenoGO.transform.SetParent(fondoGO.transform, false);
-        RectTransform rellenoRect = rellenoGO.AddComponent<RectTransform>();
-        rellenoRect.anchorMin = Vector2.zero;
-        rellenoRect.anchorMax = Vector2.one;
-        rellenoRect.offsetMin = new Vector2(4f, 4f);
-        rellenoRect.offsetMax = new Vector2(-4f, -4f);
+        rtRelleno             = rellenoGO.AddComponent<RectTransform>();
+        rtRelleno.anchorMin   = new Vector2(0f, 0f);
+        rtRelleno.anchorMax   = new Vector2(1f, 1f);   // empieza llena (100 %)
+        rtRelleno.offsetMin   = new Vector2(4f, 4f);   // padding interior izquierdo/inferior
+        rtRelleno.offsetMax   = new Vector2(-4f, -4f); // padding interior derecho/superior
 
-        imgRelleno            = rellenoGO.AddComponent<Image>();
-        imgRelleno.color      = COLOR_VERDE;
-        imgRelleno.type       = Image.Type.Filled;
-        imgRelleno.fillMethod = Image.FillMethod.Horizontal;
-        imgRelleno.fillOrigin = (int)Image.OriginHorizontal.Left;
-        imgRelleno.fillAmount = 1f;
+        imgRelleno       = rellenoGO.AddComponent<Image>();
+        imgRelleno.color = COLOR_VERDE;
+        // Simple: el ancho lo controlamos nosotros moviendo anchorMax.x
 
         ActualizarBarraVida();
     }
 
     void ActualizarBarraVida()
     {
-        if (imgRelleno == null) return;
+        if (imgRelleno == null || rtRelleno == null) return;
+
         float pct = (float)VidasActuales / vidasMax;
-        imgRelleno.fillAmount = pct;
-        imgRelleno.color      = Color.Lerp(COLOR_ROJO, COLOR_VERDE, pct);
+
+        // Encoger la barra desde la derecha: anchorMax.x va de 1 (llena) a 0 (vacía).
+        // El offsetMax.x se mantiene en -4 para preservar el padding derecho cuando está llena;
+        // en cualquier otro caso se pone a 0 para que la barra no tenga hueco extra a la derecha.
+        rtRelleno.anchorMax = new Vector2(pct, 1f);
+        rtRelleno.offsetMax = new Vector2(pct >= 1f ? -4f : 0f, -4f);
+
+        // Color: verde → rojo según la vida restante
+        imgRelleno.color = Color.Lerp(COLOR_ROJO, COLOR_VERDE, pct);
     }
 
     // ═══════════════════════════════════════════════════════════════════════════
@@ -304,7 +311,9 @@ public class ControladorMetagross : MonoBehaviour
     {
         if (proyectilPrefab == null) return;
         AudioManager.Instancia?.PlaySFX(AudioManager.Instancia.sfxCuchillo);
-        Vector3 origen = transform.position + Vector3.up * 1f;
+        // Y = 1.5 para que la flecha (collider fino: centro 0.1, semialtura 0.1)
+        // quede en el rango Y 1.4–1.6 y solape con el collider del jugador (Y 1.15–2.75).
+        Vector3 origen = transform.position + Vector3.up * 1.5f;
         foreach (Vector3 dir in DIRS)
         {
             GameObject cuchillo = Instantiate(proyectilPrefab, origen, Quaternion.LookRotation(dir));

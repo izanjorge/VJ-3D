@@ -1,5 +1,7 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
+using TMPro;
 using System.Collections;
 
 /// <summary>
@@ -25,6 +27,7 @@ public class GestorNivel : MonoBehaviour
     private bool      avanzando = false;   // evita llamadas múltiples
     private Transform jugador;
     private Puerta    puerta;
+    private GameObject canvasNivel;        // canvas con el indicador de nivel
 
     // Build Settings: 0=MainMenu, 1=Creditos, 2=Nivel0 … 11=Nivel9
     const int INDICE_CREDITOS  = 1;
@@ -37,9 +40,21 @@ public class GestorNivel : MonoBehaviour
         Instancia = this;
     }
 
+    void Start()
+    {
+        CrearIndicadorNivel();
+    }
+
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+            VolverAlMenu();
+    }
+
     void OnDestroy()
     {
         if (Instancia == this) Instancia = null;
+        if (canvasNivel != null) Destroy(canvasNivel);
     }
 
     /// <summary>
@@ -111,5 +126,54 @@ public class GestorNivel : MonoBehaviour
             SceneManager.LoadScene(INDICE_CREDITOS);   // ¡Juego completado!
         else
             SceneManager.LoadScene(indiceActual + 1);  // Siguiente nivel
+    }
+
+    /// <summary>Vuelve al Menú Principal (índice 0).</summary>
+    public void VolverAlMenu()
+    {
+        SceneManager.LoadScene(0);
+    }
+
+    /// <summary>
+    /// Crea un Canvas ScreenSpace-Overlay con un texto "Nivel X" en la
+    /// esquina superior derecha, sin interferir con la barra de Metagross
+    /// (zona superior central) ni con las vidas (zona superior izquierda).
+    /// </summary>
+    void CrearIndicadorNivel()
+    {
+        int buildIndex = SceneManager.GetActiveScene().buildIndex;
+        // Nivel 1-based visible al jugador: Nivel0 (index 2) → "Nivel 1"
+        int numNivel = buildIndex - INDICE_NIVEL0 + 1;
+
+        // ── Canvas ──────────────────────────────────────────────────────────
+        canvasNivel = new GameObject("CanvasNivel");
+        Canvas canvas = canvasNivel.AddComponent<Canvas>();
+        canvas.renderMode = RenderMode.ScreenSpaceOverlay;
+        canvas.sortingOrder = 10;
+
+        CanvasScaler scaler = canvasNivel.AddComponent<CanvasScaler>();
+        scaler.uiScaleMode         = CanvasScaler.ScaleMode.ScaleWithScreenSize;
+        scaler.referenceResolution = new Vector2(1920f, 1080f);
+        scaler.matchWidthOrHeight  = 0.5f;
+
+        canvasNivel.AddComponent<UnityEngine.UI.GraphicRaycaster>();
+
+        // ── Texto ────────────────────────────────────────────────────────────
+        GameObject goTexto = new GameObject("TextoNivel");
+        goTexto.transform.SetParent(canvasNivel.transform, false);
+
+        TextMeshProUGUI tmp = goTexto.AddComponent<TextMeshProUGUI>();
+        tmp.text      = "Nivel " + numNivel;
+        tmp.fontSize  = 48f;
+        tmp.fontStyle = FontStyles.Bold;
+        tmp.color     = Color.white;
+        tmp.alignment = TextAlignmentOptions.BottomLeft;
+
+        // Esquina inferior izquierda
+        RectTransform rt = goTexto.GetComponent<RectTransform>();
+        rt.anchorMin        = new Vector2(0.00f, 0.00f);
+        rt.anchorMax        = new Vector2(0.25f, 0.07f);
+        rt.offsetMin        = new Vector2(10f, 10f);
+        rt.offsetMax        = new Vector2(0f, 0f);
     }
 }

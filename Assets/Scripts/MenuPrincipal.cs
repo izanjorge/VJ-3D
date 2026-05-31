@@ -16,15 +16,18 @@ public class MenuPrincipal : MonoBehaviour
 
     public void Jugar()
     {
-        // Resetear monedas al iniciar una nueva partida
-        // (las vidas ya se resetean en SaludJugador.SecuenciaMuerte)
+        // Resetear vidas y monedas al iniciar una partida nueva
+        // (cubre tanto el caso de haber muerto como el de haber completado el juego)
         if (SaludJugador.Instancia != null)
         {
+            SaludJugador.Instancia.ResetearPartida();
+
             ControladorJugador ctrl = SaludJugador.Instancia.GetComponent<ControladorJugador>();
             if (ctrl != null)
             {
                 ctrl.numMonedas = 0;
                 ctrl.OnMonedasCambiadas?.Invoke(0);
+                ctrl.ResetearRalentizacion();
             }
         }
         SceneManager.LoadScene(2); // Nivel0

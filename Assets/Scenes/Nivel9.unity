@@ -979,7 +979,7 @@ MonoBehaviour:
   alturaSalto: 5
   duracionPreparacion: 2
   pausaEntreAtaques: 1.5
-  proyectilPrefab: {fileID: 1100111222333444001, guid: a3f7c2e1d4b5961f8a2e3c7d5b4f1a90, type: 3}
+  proyectilPrefab: {fileID: 1323861765713644699, guid: e567a6131cf5a634389c0764d1d0499c, type: 3}
   velocidadCuchillo: 7
 --- !u!1660057539 &9223372036854775807
 SceneRoots:

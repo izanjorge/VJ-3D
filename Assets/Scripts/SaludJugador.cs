@@ -68,7 +68,18 @@ public class SaludJugador : MonoBehaviour
 
         // Reactivar controles por si quedaron desactivados (muerte interrumpida).
         ControladorJugador controlador = GetComponent<ControladorJugador>();
-        if (controlador != null) controlador.enabled = true;
+        if (controlador != null)
+        {
+            controlador.enabled = true;
+
+            // Asegurarse de que el renderer es visible (puede haber quedado oculto
+            // si la escena cambió durante el parpadeo de muerte/invulnerabilidad).
+            if (rendererJugador != null)
+                rendererJugador.enabled = true;
+
+            // Cancelar la ralentización del slime para que no persista entre niveles.
+            controlador.ResetearRalentizacion();
+        }
 
         // Renotificar la UI con las vidas actuales para que los corazones
         // se muestren correctamente en la nueva escena.
@@ -140,6 +151,10 @@ public class SaludJugador : MonoBehaviour
             tiempoRestante -= intervaloRapido;
         }
 
+        // Garantizar que el renderer quede visible antes de salir
+        if (rendererJugador != null)
+            rendererJugador.enabled = true;
+
         // Resetear vidas y monedas antes de volver al MainMenu
         VidasActuales = vidasMax;
         OnVidaCambiada?.Invoke(VidasActuales, vidasMax);
@@ -149,9 +164,20 @@ public class SaludJugador : MonoBehaviour
         {
             ctrl.numMonedas = 0;
             ctrl.OnMonedasCambiadas?.Invoke(0);
+            ctrl.ResetearRalentizacion();
         }
 
         SceneManager.LoadScene(0); // MainMenu
+    }
+
+    /// <summary>
+    /// Resetea vidas y notifica a la UI. Llamado desde MenuPrincipal al iniciar partida nueva.
+    /// </summary>
+    public void ResetearPartida()
+    {
+        VidasActuales = vidasMax;
+        OnVidaCambiada?.Invoke(VidasActuales, vidasMax);
+        ActualizarUI();
     }
 
     void ActualizarUI()

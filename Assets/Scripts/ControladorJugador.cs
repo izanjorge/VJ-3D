@@ -313,6 +313,20 @@ public class ControladorJugador : MonoBehaviour
         corutinRalentizacion = StartCoroutine(CorutinRalentizacion(duracion));
     }
 
+    /// <summary>
+    /// Cancela inmediatamente la ralentización del slime y restaura la velocidad normal.
+    /// Llamado al cambiar de nivel o al morir, para que el efecto no persista.
+    /// </summary>
+    public void ResetearRalentizacion()
+    {
+        if (corutinRalentizacion != null)
+        {
+            StopCoroutine(corutinRalentizacion);
+            corutinRalentizacion = null;
+        }
+        velocidad = velocidadNormal;
+    }
+
     IEnumerator CorutinRalentizacion(float duracion)
     {
         velocidad = velocidadNormal * 0.5f;
